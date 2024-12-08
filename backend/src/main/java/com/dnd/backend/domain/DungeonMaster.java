@@ -30,4 +30,9 @@ public class DungeonMaster {
 
     @OneToMany(mappedBy = "dungeonMaster", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Campaign> hostedCampaigns;
+
+    public DungeonMaster(UserDetails userDetails, List<Campaign> hostedCampaigns) {
+        this.userDetails = userDetails;
+        this.hostedCampaigns = hostedCampaigns;
+    }
 }

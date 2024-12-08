@@ -41,4 +41,13 @@ public class Campaign {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Player> players;
+
+    public Campaign(String title, String description, DungeonMaster dungeonMaster, LocalDate beginningDate, GameStatus status, List<Player> players) {
+        this.title = title;
+        this.description = description;
+        this.dungeonMaster = dungeonMaster;
+        this.beginningDate = beginningDate;
+        this.status = status;
+        this.players = players;
+    }
 }

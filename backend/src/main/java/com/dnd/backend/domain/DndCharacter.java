@@ -36,4 +36,13 @@ public class DndCharacter {
     @Min(14)
     private int age;
     private boolean canPerformMagic;
+
+    public DndCharacter(String firstName, String lastName, CharacterClass dndClass, CharacterRace race, int age, boolean canPerformMagic) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dndClass = dndClass;
+        this.race = race;
+        this.age = age;
+        this.canPerformMagic = canPerformMagic;
+    }
 }

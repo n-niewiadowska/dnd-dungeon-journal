@@ -30,8 +30,14 @@ public class Player {
     private UserDetails userDetails;
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private Character character;
+    private DndCharacter character;
 
     @ManyToMany(mappedBy = "players", fetch = FetchType.LAZY)
     private List<Campaign> playedCampaigns;
+
+    public Player(UserDetails userDetails, DndCharacter character, List<Campaign> playedCampaigns) {
+        this.userDetails = userDetails;
+        this.character = character;
+        this.playedCampaigns = playedCampaigns;
+    }
 }
