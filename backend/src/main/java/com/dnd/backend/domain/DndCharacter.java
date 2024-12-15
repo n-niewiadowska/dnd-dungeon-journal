@@ -4,6 +4,8 @@ import com.dnd.backend.constant.CharacterClass;
 import com.dnd.backend.constant.CharacterRace;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,7 +24,7 @@ import lombok.Setter;
 public class DndCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     private String firstName;
@@ -30,7 +32,10 @@ public class DndCharacter {
     @NotNull
     private String lastName;
 
+    @Enumerated(EnumType.STRING)
     private CharacterClass dndClass;
+
+    @Enumerated(EnumType.STRING)
     private CharacterRace race;
 
     @Min(14)
