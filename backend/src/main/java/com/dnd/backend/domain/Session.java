@@ -1,12 +1,17 @@
 package com.dnd.backend.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.PastOrPresent;
@@ -30,11 +35,16 @@ public class Session {
 
     private String notes;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Campaign campaign;
 
     @ManyToMany
-    private List<Player> attendees;
+    @JoinTable(
+        name = "session_attendees",
+        joinColumns = @JoinColumn(name = "session_id"),
+        inverseJoinColumns = @JoinColumn(name = "player_id")
+    )
+    private List<Player> attendees = new ArrayList<>();
 
     public Session(LocalDate sessionDate, String notes, Campaign campaign) {
         this.sessionDate = sessionDate;

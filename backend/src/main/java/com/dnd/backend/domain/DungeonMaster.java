@@ -1,5 +1,6 @@
 package com.dnd.backend.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -17,7 +18,7 @@ import lombok.Setter;
 public class DungeonMaster extends User {
 
     @OneToMany(mappedBy = "dungeonMaster", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Campaign> hostedCampaigns;
+    private List<Campaign> hostedCampaigns = new ArrayList<>();
 
     public void addHostedCampaign(Campaign campaign) {
         this.hostedCampaigns.add(campaign);

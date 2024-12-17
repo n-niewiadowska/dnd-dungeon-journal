@@ -1,5 +1,6 @@
 package com.dnd.backend.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -21,7 +22,7 @@ public class Player extends User {
     private DndCharacter character;
 
     @ManyToMany(mappedBy = "players", fetch = FetchType.LAZY)
-    private List<Campaign> playedCampaigns;
+    private List<Campaign> playedCampaigns = new ArrayList<>();
 
     public Player(String username, String email, String password, DndCharacter character) {
         super(username, email, password);

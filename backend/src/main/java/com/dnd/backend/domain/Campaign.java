@@ -1,10 +1,12 @@
 package com.dnd.backend.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.backend.constant.GameStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -45,10 +47,10 @@ public class Campaign {
     private GameStatus status;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<Player> players;
+    private List<Player> players = new ArrayList<>();
 
-    @OneToMany
-    private List<Session> sessions;
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.REMOVE)
+    private List<Session> sessions = new ArrayList<>();
 
     public Campaign(String title, String description, DungeonMaster dungeonMaster, LocalDate beginningDate, GameStatus status) {
         this.title = title;
