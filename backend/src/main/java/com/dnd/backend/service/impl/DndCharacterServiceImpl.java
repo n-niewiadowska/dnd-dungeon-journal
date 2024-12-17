@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dnd.backend.constant.CharacterClass;
 import com.dnd.backend.domain.DndCharacter;
 import com.dnd.backend.dto.DndCharacterDTO;
 import com.dnd.backend.repository.DndCharacterRepository;
@@ -68,5 +69,9 @@ public class DndCharacterServiceImpl implements DndCharacterService {
     @Transactional
     public void deleteCharacter(Long id) {
         dndCharacterRepository.deleteById(id);
+    }
+
+    public Double findAverageOfMagicalCharactersFromClass(CharacterClass dndClass) {
+        return dndCharacterRepository.findAvgOfMagicalCharactersForClass(dndClass);
     }
 }

@@ -7,8 +7,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dnd.backend.domain.Player;
 import com.dnd.backend.domain.Session;
 import com.dnd.backend.dto.SessionDTO;
+import com.dnd.backend.repository.PlayerRepository;
 import com.dnd.backend.repository.SessionRepository;
 import com.dnd.backend.service.SessionService;
 
@@ -19,6 +21,9 @@ public class SessionServiceImpl implements SessionService {
 
     @Autowired
     private SessionRepository sessionRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -71,5 +76,38 @@ public class SessionServiceImpl implements SessionService {
         return sessionRepository.findByCampaignTitle(campaignTitle).stream()
             .map(session -> modelMapper.map(campaignTitle, SessionDTO.class))
             .toList();
+    }
+
+    @Transactional
+    public Optional<SessionDTO> addAttendeeToSession(Long sessionId, Long playerId) {
+        Optional<Session> session = sessionRepository.findById(sessionId);
+        Optional<Player> player = playerRepository.findById(playerId);
+
+        if (session.isPresent() && session.isPresent()) {
+            session.get().addAttendee(player.get());
+
+            sessionRepository.save(session.get());
+            return session.map(s -> modelMapper.map(s, SessionDTO.class));
+        }
+
+        return Optional.empty();
+    }
+
+    @Transactional
+    public Optional<SessionDTO> removePlayerFromSession(Long sessionId, Long playerId) {
+        Optional<Session> session = sessionRepository.findById(sessionId);
+
+        if (session.isPresent()) {
+            session.get().removeAttendee(playerId);
+            sessionRepository.save(session.get());
+
+            return session.map(s -> modelMapper.map(s, SessionDTO.class));
+        }
+        
+        return Optional.empty();
+    }
+
+    public List<Object[]> getAttendeesCountForEverySession() {
+        return sessionRepository.countAttendeesForEverySession();
     }
 }
