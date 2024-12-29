@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,17 +28,23 @@ import jakarta.transaction.Transactional;
 @Service
 public class CampaignServiceImpl implements CampaignService {
 
-    @Autowired
-    private CampaignRepository campaignRepository;
+    private final CampaignRepository campaignRepository;
+    private final PlayerRepository playerRepository;
+    private final SessionRepository sessionRepository;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private SessionRepository sessionRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    public CampaignServiceImpl(
+            CampaignRepository campaignRepository, 
+            PlayerRepository playerRepository, 
+            SessionRepository sessionRepository, 
+            ModelMapper modelMapper
+    ) {
+        this.campaignRepository = campaignRepository;
+        this.playerRepository = playerRepository;
+        this.sessionRepository = sessionRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public List<CampaignDTO> findAllCampaigns() {
@@ -68,11 +73,13 @@ public class CampaignServiceImpl implements CampaignService {
         if (existingCampaign.isPresent()) {
             Campaign campaign = existingCampaign.get();
 
-            campaign.setTitle(campaignDTO.title());
-            campaign.setDescription(campaignDTO.description());
-            campaign.setDungeonMaster(campaignDTO.dungeonMaster());
-            campaign.setBeginningDate(campaignDTO.beginningDate());
-            campaign.setStatus(campaignDTO.status());
+            campaign.toBuilder()
+                .title(campaignDTO.title())
+                .description(campaignDTO.description())
+                .dungeonMaster(campaignDTO.dungeonMaster())
+                .beginningDate(campaignDTO.beginningDate())
+                .status(campaignDTO.status())
+                .build();
 
             campaignRepository.save(campaign);
             return Optional.of(campaignDTO);

@@ -19,12 +19,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @Entity
@@ -46,9 +48,11 @@ public class Campaign {
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
+    @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Player> players = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.REMOVE)
     private List<Session> sessions = new ArrayList<>();
 

@@ -8,15 +8,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @Entity
 public class DungeonMaster extends User {
 
+    @Builder.Default
     @OneToMany(mappedBy = "dungeonMaster", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Campaign> hostedCampaigns = new ArrayList<>();
 

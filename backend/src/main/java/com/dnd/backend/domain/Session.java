@@ -16,12 +16,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @Entity
@@ -38,6 +40,7 @@ public class Session {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Campaign campaign;
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(
         name = "session_attendees",

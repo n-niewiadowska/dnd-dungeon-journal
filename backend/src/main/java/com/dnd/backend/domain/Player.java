@@ -9,10 +9,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @Entity
@@ -21,6 +23,7 @@ public class Player extends User {
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private DndCharacter character;
 
+    @Builder.Default
     @ManyToMany(mappedBy = "players", fetch = FetchType.LAZY)
     private List<Campaign> playedCampaigns = new ArrayList<>();
 

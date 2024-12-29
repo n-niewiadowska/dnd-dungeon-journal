@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dnd.backend.constant.CharacterClass;
@@ -18,11 +17,14 @@ import jakarta.transaction.Transactional;
 @Service
 public class DndCharacterServiceImpl implements DndCharacterService {
     
-    @Autowired
-    private DndCharacterRepository dndCharacterRepository;
+    private final DndCharacterRepository dndCharacterRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+
+    public DndCharacterServiceImpl(DndCharacterRepository dndCharacterRepository, ModelMapper modelMapper) {
+        this.dndCharacterRepository = dndCharacterRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public List<DndCharacterDTO> findAllCharacters() {
@@ -51,12 +53,14 @@ public class DndCharacterServiceImpl implements DndCharacterService {
         if (existingCharacter.isPresent()) {
             DndCharacter dndCharacter = existingCharacter.get();
 
-            dndCharacter.setFirstName(dndCharacterDTO.firstName());
-            dndCharacter.setLastName(dndCharacterDTO.lastName());
-            dndCharacter.setDndClass(dndCharacterDTO.dndClass());
-            dndCharacter.setRace(dndCharacterDTO.race());
-            dndCharacter.setAge(dndCharacterDTO.age());
-            dndCharacter.setCanPerformMagic(dndCharacterDTO.canPerformMagic());
+            dndCharacter.toBuilder()
+                .firstName(dndCharacterDTO.firstName())
+                .lastName(dndCharacterDTO.lastName())
+                .dndClass(dndCharacterDTO.dndClass())
+                .race(dndCharacterDTO.race())
+                .age(dndCharacterDTO.age())
+                .canPerformMagic(dndCharacterDTO.canPerformMagic())
+                .build();
 
             dndCharacterRepository.save(dndCharacter);
             return Optional.of(dndCharacterDTO);

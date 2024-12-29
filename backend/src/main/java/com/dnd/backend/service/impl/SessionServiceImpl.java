@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dnd.backend.domain.Player;
@@ -19,14 +18,20 @@ import jakarta.transaction.Transactional;
 @Service
 public class SessionServiceImpl implements SessionService {
 
-    @Autowired
-    private SessionRepository sessionRepository;
+    private final SessionRepository sessionRepository;
+    private final PlayerRepository playerRepository;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    public SessionServiceImpl(
+            SessionRepository sessionRepository, 
+            PlayerRepository playerRepository, 
+            ModelMapper modelMapper
+    ) {
+        this.sessionRepository = sessionRepository;
+        this.playerRepository = playerRepository;
+        this.modelMapper = modelMapper;
+    }
     
     @Override
     public List<SessionDTO> findAllSessions() {
@@ -55,9 +60,11 @@ public class SessionServiceImpl implements SessionService {
         if (existingSession.isPresent()) {
             Session session = existingSession.get();
 
-            session.setSessionDate(sessionDTO.sessionDate());
-            session.setNotes(sessionDTO.notes());
-            session.setCampaign(sessionDTO.campaign());
+            session.toBuilder()
+                .sessionDate(sessionDTO.sessionDate())
+                .notes(sessionDTO.notes())
+                .campaign(sessionDTO.campaign())
+                .build();
 
             sessionRepository.save(session);
             return Optional.of(sessionDTO);
