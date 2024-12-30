@@ -41,8 +41,8 @@ public class DndCharacterServiceImpl implements DndCharacterService {
 
     @Override
     public DndCharacterDTO createCharacter(DndCharacterDTO dndCharacterDTO) {
-        dndCharacterRepository.save(modelMapper.map(dndCharacterDTO, DndCharacter.class));
-        return dndCharacterDTO;
+        DndCharacter savedCharacter = dndCharacterRepository.save(modelMapper.map(dndCharacterDTO, DndCharacter.class));
+        return modelMapper.map(savedCharacter, DndCharacterDTO.class);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class DndCharacterServiceImpl implements DndCharacterService {
                 .build();
 
             dndCharacterRepository.save(dndCharacter);
-            return Optional.of(dndCharacterDTO);
+            return Optional.of(modelMapper.map(dndCharacter, DndCharacterDTO.class));
         }
         
         return Optional.empty();

@@ -1,14 +1,14 @@
 package com.dnd.backend.repository;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.dnd.backend.domain.Player;
 
 @Repository
-public interface PlayerRepository extends CrudRepository<Player, Long> {
+public interface PlayerRepository extends JpaRepository<Player, Long> {
 
-    List<Player> findByUsername(String username);
+    Optional<Player> findByUsername(String username);
 }

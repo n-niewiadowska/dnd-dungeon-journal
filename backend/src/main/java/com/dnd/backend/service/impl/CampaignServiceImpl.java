@@ -36,7 +36,7 @@ public class CampaignServiceImpl implements CampaignService {
 
     public CampaignServiceImpl(
             CampaignRepository campaignRepository, 
-            PlayerRepository playerRepository, 
+            PlayerRepository playerRepository,
             SessionRepository sessionRepository, 
             ModelMapper modelMapper
     ) {
@@ -61,8 +61,8 @@ public class CampaignServiceImpl implements CampaignService {
     
     @Override
     public CampaignDTO createCampaign(CampaignDTO campaignDTO) {
-        campaignRepository.save(modelMapper.map(campaignDTO, Campaign.class));
-        return campaignDTO;
+        Campaign savedCampaign = campaignRepository.save(modelMapper.map(campaignDTO, Campaign.class));
+        return modelMapper.map(savedCampaign, CampaignDTO.class);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class CampaignServiceImpl implements CampaignService {
                 .build();
 
             campaignRepository.save(campaign);
-            return Optional.of(campaignDTO);
+            return Optional.of(modelMapper.map(campaign, CampaignDTO.class));
         }
         
         return Optional.empty();

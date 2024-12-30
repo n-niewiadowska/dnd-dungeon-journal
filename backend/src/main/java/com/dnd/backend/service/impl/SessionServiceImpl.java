@@ -48,8 +48,8 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public SessionDTO createSession(SessionDTO sessionDTO) {
-        sessionRepository.save(modelMapper.map(sessionDTO, Session.class));
-        return sessionDTO;
+        Session savedSession = sessionRepository.save(modelMapper.map(sessionDTO, Session.class));
+        return modelMapper.map(savedSession, SessionDTO.class);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class SessionServiceImpl implements SessionService {
                 .build();
 
             sessionRepository.save(session);
-            return Optional.of(sessionDTO);
+            return Optional.of(modelMapper.map(session, SessionDTO.class));
         }
         
         return Optional.empty();
