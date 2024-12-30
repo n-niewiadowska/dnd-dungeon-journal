@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dnd.backend.dto.CampaignDTO;
 import com.dnd.backend.service.impl.CampaignServiceImpl;
+import com.dnd.backend.service.impl.DungeonMasterServiceImpl;
 
 import jakarta.validation.Valid;
 
@@ -28,10 +29,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/campaign")
 public class CampaignController {
     
-    CampaignServiceImpl campaignService;
+    private final CampaignServiceImpl campaignService;
+    private final DungeonMasterServiceImpl dungeonMasterService;
 
-    public CampaignController(CampaignServiceImpl campaignService) {
+    public CampaignController(CampaignServiceImpl campaignService, DungeonMasterServiceImpl dungeonMasterService) {
         this.campaignService = campaignService;
+        this.dungeonMasterService = dungeonMasterService;
     }
 
     // GET requests
@@ -83,6 +86,7 @@ public class CampaignController {
     @PostMapping
     public ResponseEntity<CampaignDTO> createCampaign(@RequestBody @Valid CampaignDTO campaignDTO) {
         CampaignDTO createdCampaign = campaignService.createCampaign(campaignDTO);
+        dungeonMasterService.addHostedCampaign(createdCampaign.dungeonMaster().getId() ,createdCampaign.id());
         URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .build().toUri();
@@ -118,6 +122,7 @@ public class CampaignController {
         Optional<CampaignDTO> campaign = campaignService.findCampaignById(id);
         if (campaign.isPresent()) {
             campaignService.deleteCampaign(id);
+            dungeonMasterService.removeHostedCampaign(campaign.get().dungeonMaster().getId(), id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
