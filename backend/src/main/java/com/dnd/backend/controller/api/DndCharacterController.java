@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.dnd.backend.constant.CharacterClass;
 import com.dnd.backend.dto.DndCharacterDTO;
 import com.dnd.backend.service.impl.DndCharacterServiceImpl;
 
@@ -49,8 +48,7 @@ public class DndCharacterController {
     @GetMapping("/avg-magical/{dndClass}")
     ResponseEntity<Double> getAverageOfMagicalCharactersForClass(@PathVariable String dndClass) {
         try {
-            CharacterClass characterClass = CharacterClass.valueOf(dndClass.toUpperCase());
-            Double average = dndCharacterService.findAverageOfMagicalCharactersFromClass(characterClass);
+            Double average = dndCharacterService.findAverageOfMagicalCharactersFromClass(dndClass);
             return ResponseEntity.ok(average);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

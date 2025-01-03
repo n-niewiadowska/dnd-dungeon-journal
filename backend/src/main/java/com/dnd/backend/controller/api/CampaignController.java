@@ -86,7 +86,7 @@ public class CampaignController {
     @PostMapping
     public ResponseEntity<CampaignDTO> createCampaign(@RequestBody @Valid CampaignDTO campaignDTO) {
         CampaignDTO createdCampaign = campaignService.createCampaign(campaignDTO);
-        dungeonMasterService.addHostedCampaign(createdCampaign.dungeonMaster().getId() ,createdCampaign.id());
+        dungeonMasterService.addHostedCampaign(createdCampaign.dungeonMaster().id() ,createdCampaign.id());
         URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .build().toUri();
@@ -122,7 +122,7 @@ public class CampaignController {
         Optional<CampaignDTO> campaign = campaignService.findCampaignById(id);
         if (campaign.isPresent()) {
             campaignService.deleteCampaign(id);
-            dungeonMasterService.removeHostedCampaign(campaign.get().dungeonMaster().getId(), id);
+            dungeonMasterService.removeHostedCampaign(campaign.get().dungeonMaster().id(), id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

@@ -12,6 +12,6 @@ import com.dnd.backend.domain.DndCharacter;
 public interface DndCharacterRepository extends JpaRepository<DndCharacter, Long> {
 
     @Query(value = "SELECT AVG(CASE WHEN can_perform_magic = true THEN 1 ELSE 0 END) FROM dnd_character WHERE dnd_class = :dndClass", nativeQuery = true)
-    Double findAvgOfMagicalCharactersForClass(@Param("dndClass") CharacterClass dndClass);
+    Double findAvgOfMagicalCharactersForClass(@Param("dndClass") String dndClass);
 
 }

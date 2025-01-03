@@ -19,10 +19,20 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long>, JpaSp
     @Query("SELECT COUNT(c) FROM Campaign c JOIN c.dungeonMaster dm WHERE dm.id = :dmId")
     Integer countCampaignsByDungeonMaster(@Param("dmId") Long dmId);
 
-    @Query(value = "SELECT title FROM Campaign WHERE status = 'PLANNED' AND beginningDate > :date", nativeQuery = true)
+    @Query(value = "SELECT title FROM Campaign WHERE status = 'PLANNED' AND beginning_date > :date", nativeQuery = true)
     List<String> findPlannedCampaignTitlesAfterDate(@Param("date") LocalDate date);
 
-    @Query("SELECT AVG(COUNT(a)) FROM Campaign c JOIN c.sessions s JOIN s.attendees a WHERE c.id = :campaignId GROUP BY c.id")
+    @Query("""
+        SELECT AVG(playersCount)
+        FROM (
+            SELECT COUNT(a) AS playersCount
+            FROM Campaign c
+            JOIN c.sessions s
+            JOIN s.attendees a
+            WHERE c.id = :campaignId
+            GROUP BY s.id
+        ) AS sessionCounts
+    """)
     Double findAverageNumberOfPlayersPerSessionInCampaign(@Param("campaignId") Long campaignId);
 
 } 
