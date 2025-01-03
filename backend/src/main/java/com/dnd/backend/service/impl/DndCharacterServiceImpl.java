@@ -3,7 +3,7 @@ package com.dnd.backend.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
+import com.dnd.backend.mapper.DndCharacterMapper;
 import org.springframework.stereotype.Service;
 
 import com.dnd.backend.constant.CharacterClass;
@@ -19,30 +19,39 @@ public class DndCharacterServiceImpl implements DndCharacterService {
     
     private final DndCharacterRepository dndCharacterRepository;
 
-    private final ModelMapper modelMapper;
+    private final DndCharacterMapper mapper;
 
-    public DndCharacterServiceImpl(DndCharacterRepository dndCharacterRepository, ModelMapper modelMapper) {
+    public DndCharacterServiceImpl(DndCharacterRepository dndCharacterRepository, DndCharacterMapper mapper) {
         this.dndCharacterRepository = dndCharacterRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Override
     public List<DndCharacterDTO> findAllCharacters() {
         return dndCharacterRepository.findAll().stream()
-            .map(character -> modelMapper.map(character, DndCharacterDTO.class))
+            .map(mapper::mapCharacterToDto)
             .toList();
     }
 
     @Override
     public Optional<DndCharacterDTO> findCharacterById(Long id) {
         Optional<DndCharacter> dndCharacter = dndCharacterRepository.findById(id);
-        return dndCharacter.map(character -> modelMapper.map(character, DndCharacterDTO.class));
+        return dndCharacter.map(mapper::mapCharacterToDto);
     }
 
     @Override
     public DndCharacterDTO createCharacter(DndCharacterDTO dndCharacterDTO) {
-        DndCharacter savedCharacter = dndCharacterRepository.save(modelMapper.map(dndCharacterDTO, DndCharacter.class));
-        return modelMapper.map(savedCharacter, DndCharacterDTO.class);
+        DndCharacter newCharacter = DndCharacter.builder()
+                .firstName(dndCharacterDTO.firstName())
+                .lastName(dndCharacterDTO.lastName())
+                .dndClass(dndCharacterDTO.dndClass())
+                .race(dndCharacterDTO.race())
+                .age(dndCharacterDTO.age())
+                .canPerformMagic(dndCharacterDTO.canPerformMagic())
+                .build();
+
+        DndCharacter savedCharacter = dndCharacterRepository.save(newCharacter);
+        return mapper.mapCharacterToDto(savedCharacter);
     }
 
     @Override
@@ -53,17 +62,15 @@ public class DndCharacterServiceImpl implements DndCharacterService {
         if (existingCharacter.isPresent()) {
             DndCharacter dndCharacter = existingCharacter.get();
 
-            dndCharacter.toBuilder()
-                .firstName(dndCharacterDTO.firstName())
-                .lastName(dndCharacterDTO.lastName())
-                .dndClass(dndCharacterDTO.dndClass())
-                .race(dndCharacterDTO.race())
-                .age(dndCharacterDTO.age())
-                .canPerformMagic(dndCharacterDTO.canPerformMagic())
-                .build();
+            dndCharacter.setFirstName(dndCharacterDTO.firstName());
+            dndCharacter.setLastName(dndCharacterDTO.lastName());
+            dndCharacter.setDndClass(dndCharacterDTO.dndClass());
+            dndCharacter.setRace(dndCharacterDTO.race());
+            dndCharacter.setAge(dndCharacterDTO.age());
+            dndCharacter.setCanPerformMagic(dndCharacterDTO.canPerformMagic());
 
             dndCharacterRepository.save(dndCharacter);
-            return Optional.of(modelMapper.map(dndCharacter, DndCharacterDTO.class));
+            return Optional.of(mapper.mapCharacterToDto(dndCharacter));
         }
         
         return Optional.empty();
@@ -75,7 +82,7 @@ public class DndCharacterServiceImpl implements DndCharacterService {
         dndCharacterRepository.deleteById(id);
     }
 
-    public Double findAverageOfMagicalCharactersFromClass(CharacterClass dndClass) {
+    public Double findAverageOfMagicalCharactersFromClass(String dndClass) {
         return dndCharacterRepository.findAvgOfMagicalCharactersForClass(dndClass);
     }
 }

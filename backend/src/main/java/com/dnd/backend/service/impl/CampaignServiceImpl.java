@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.dnd.backend.mapper.CampaignMapper;
 import org.springframework.data.domain.Page;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,37 +32,44 @@ public class CampaignServiceImpl implements CampaignService {
     private final PlayerRepository playerRepository;
     private final SessionRepository sessionRepository;
 
-    private final ModelMapper modelMapper;
+    private final CampaignMapper mapper;
 
     public CampaignServiceImpl(
             CampaignRepository campaignRepository, 
             PlayerRepository playerRepository,
-            SessionRepository sessionRepository, 
-            ModelMapper modelMapper
+            SessionRepository sessionRepository,
+            CampaignMapper mapper
     ) {
         this.campaignRepository = campaignRepository;
         this.playerRepository = playerRepository;
         this.sessionRepository = sessionRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Override
     public List<CampaignDTO> findAllCampaigns() {
         return campaignRepository.findAll().stream()
-            .map(campaign -> modelMapper.map(campaign, CampaignDTO.class))
+            .map(mapper::mapCampaignToDto)
             .toList();
-    };
+    }
 
     @Override
     public Optional<CampaignDTO> findCampaignById(Long id) {
         Optional<Campaign> foundCampaign = campaignRepository.findById(id);
-        return foundCampaign.map(campaign -> modelMapper.map(campaign, CampaignDTO.class));
+        return foundCampaign.map(mapper::mapCampaignToDto);
     }
     
     @Override
     public CampaignDTO createCampaign(CampaignDTO campaignDTO) {
-        Campaign savedCampaign = campaignRepository.save(modelMapper.map(campaignDTO, Campaign.class));
-        return modelMapper.map(savedCampaign, CampaignDTO.class);
+        Campaign newCampaign = Campaign.builder()
+                .title(campaignDTO.title())
+                .description(campaignDTO.description())
+                .dungeonMaster(mapper.mapDtoToCampaign(campaignDTO).getDungeonMaster())
+                .beginningDate(campaignDTO.beginningDate())
+                .status(campaignDTO.status())
+                .build();
+        Campaign savedCampaign = campaignRepository.save(newCampaign);
+        return mapper.mapCampaignToDto(savedCampaign);
     }
 
     @Override
@@ -73,16 +80,14 @@ public class CampaignServiceImpl implements CampaignService {
         if (existingCampaign.isPresent()) {
             Campaign campaign = existingCampaign.get();
 
-            campaign.toBuilder()
-                .title(campaignDTO.title())
-                .description(campaignDTO.description())
-                .dungeonMaster(campaignDTO.dungeonMaster())
-                .beginningDate(campaignDTO.beginningDate())
-                .status(campaignDTO.status())
-                .build();
+            campaign.setTitle(campaignDTO.title());
+            campaign.setDescription(campaignDTO.description());
+            campaign.setDungeonMaster(mapper.mapDtoToCampaign(campaignDTO).getDungeonMaster());
+            campaign.setBeginningDate(campaignDTO.beginningDate());
+            campaign.setStatus(campaignDTO.status());
 
             campaignRepository.save(campaign);
-            return Optional.of(modelMapper.map(campaign, CampaignDTO.class));
+            return Optional.of(mapper.mapCampaignToDto(campaign));
         }
         
         return Optional.empty();
@@ -96,7 +101,7 @@ public class CampaignServiceImpl implements CampaignService {
 
     public List<CampaignDTO> findCampaignsByDungeonMasterUsername(String username) {
         return campaignRepository.findByDungeonMasterUsername(username).stream()
-            .map(campaign -> modelMapper.map(campaign, CampaignDTO.class))
+            .map(mapper::mapCampaignToDto)
             .toList();
     }
 
@@ -105,12 +110,15 @@ public class CampaignServiceImpl implements CampaignService {
         Optional<Campaign> campaign = campaignRepository.findById(campaignId);
         Optional<Player> player = playerRepository.findById(playerId);
 
+        System.out.println("Campaign found: " + campaign.isPresent());
+        System.out.println("Player found: " + player.isPresent());
+
         if (campaign.isPresent() && player.isPresent()) {
             campaign.get().addPlayer(player.get());
 
             campaignRepository.save(campaign.get());
 
-            return campaign.map(c -> modelMapper.map(c, CampaignDTO.class));
+            return campaign.map(mapper::mapCampaignToDto);
         }
 
         return Optional.empty();
@@ -124,7 +132,7 @@ public class CampaignServiceImpl implements CampaignService {
             campaign.get().removePlayer(playerId);
             campaignRepository.save(campaign.get());
 
-            return campaign.map(c -> modelMapper.map(c, CampaignDTO.class));
+            return campaign.map(mapper::mapCampaignToDto);
         }
         
         return Optional.empty();
@@ -139,7 +147,7 @@ public class CampaignServiceImpl implements CampaignService {
             campaign.get().addSession(session.get());
 
             campaignRepository.save(campaign.get());
-            return campaign.map(c -> modelMapper.map(c, CampaignDTO.class));
+            return campaign.map(mapper::mapCampaignToDto);
         }
 
         return Optional.empty();
@@ -153,7 +161,7 @@ public class CampaignServiceImpl implements CampaignService {
             campaign.get().removeSession(sessionId);
             campaignRepository.save(campaign.get());
 
-            return campaign.map(c -> modelMapper.map(c, CampaignDTO.class));
+            return campaign.map(mapper::mapCampaignToDto);
         }
         
         return Optional.empty();
@@ -180,6 +188,6 @@ public class CampaignServiceImpl implements CampaignService {
         Specification<Campaign> specification = CampaignSpecification.getSpecification(params);
 
         return campaignRepository.findAll(specification, pageable)
-            .map(campaign -> modelMapper.map(campaign, CampaignDTO.class));
+            .map(mapper::mapCampaignToDto);
     }
 }

@@ -8,5 +8,5 @@ public record SessionDTO(
     Long id,
     LocalDate sessionDate,
     String notes,
-    Campaign campaign
+    CampaignDTO campaign
 ) {}

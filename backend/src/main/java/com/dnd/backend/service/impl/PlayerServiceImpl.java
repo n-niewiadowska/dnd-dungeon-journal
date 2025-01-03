@@ -3,7 +3,9 @@ package com.dnd.backend.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
+import com.dnd.backend.mapper.PlayerMapper;
+import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Service;
 
 import com.dnd.backend.domain.Campaign;
 import com.dnd.backend.domain.Player;
@@ -14,36 +16,43 @@ import com.dnd.backend.service.PlayerService;
 
 import jakarta.transaction.Transactional;
 
+@Service
 public class PlayerServiceImpl implements PlayerService {
     
     private final PlayerRepository playerRepository;
     private final CampaignRepository campaignRepository;
 
-    private final ModelMapper modelMapper;
+    private final PlayerMapper mapper;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, CampaignRepository campaignRepository, ModelMapper modelMapper) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, CampaignRepository campaignRepository, PlayerMapper mapper) {
         this.playerRepository = playerRepository;
         this.campaignRepository = campaignRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Override
     public List<PlayerDTO> findAllPlayers() {
         return playerRepository.findAll().stream()
-            .map(player -> modelMapper.map(player, PlayerDTO.class))
+            .map(mapper::mapPlayerToDto)
             .toList();
     }
 
     @Override
     public Optional<PlayerDTO> findPlayerById(Long id) {
         Optional<Player> playerOptional = playerRepository.findById(id);
-        return playerOptional.map(player -> modelMapper.map(player, PlayerDTO.class));
+        return playerOptional.map(mapper::mapPlayerToDto);
     }
 
     @Override
     public PlayerDTO createPlayer(PlayerDTO playerDTO) {
-        Player savedPlayer = playerRepository.save(modelMapper.map(playerDTO, Player.class));
-        return modelMapper.map(savedPlayer, PlayerDTO.class);
+        Player newPlayer = Player.builder()
+                .username(playerDTO.username())
+                .email(playerDTO.email())
+                .password(playerDTO.password())
+                .character(mapper.mapDtoToPlayer(playerDTO).getCharacter())
+                .build();
+        Player savedPlayer = playerRepository.save(newPlayer);
+        return mapper.mapPlayerToDto(savedPlayer);
     }
 
     @Override
@@ -56,10 +65,10 @@ public class PlayerServiceImpl implements PlayerService {
             player.setUsername(playerDTO.username());
             player.setPassword(playerDTO.password());
             player.setEmail(playerDTO.email());
-            player.setCharacter(playerDTO.character());
+            player.setCharacter(mapper.mapDtoToPlayer(playerDTO).getCharacter());
 
             playerRepository.save(player);
-            return Optional.of(modelMapper.map(player, PlayerDTO.class));
+            return Optional.of(mapper.mapPlayerToDto(player));
         }
         
         return Optional.empty();
@@ -72,7 +81,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     public Optional<PlayerDTO> findPlayerByUsername(String username) {
         Optional<Player> playerOptional = playerRepository.findByUsername(username);
-        return playerOptional.map(player -> modelMapper.map(player, PlayerDTO.class));
+        return playerOptional.map(mapper::mapPlayerToDto);
     }
 
     @Transactional
@@ -85,7 +94,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             campaignRepository.save(campaign.get());
 
-            return player.map(p -> modelMapper.map(p, PlayerDTO.class));
+            return player.map(mapper::mapPlayerToDto);
         }
 
         return Optional.empty();
@@ -99,7 +108,7 @@ public class PlayerServiceImpl implements PlayerService {
             player.get().removePlayedCampaign(campaignId);
             playerRepository.save(player.get());
 
-            return player.map(p -> modelMapper.map(p, PlayerDTO.class));
+            return player.map(mapper::mapPlayerToDto);
         }
         
         return Optional.empty();

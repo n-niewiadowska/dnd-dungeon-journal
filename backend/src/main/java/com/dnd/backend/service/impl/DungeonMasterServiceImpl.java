@@ -3,7 +3,9 @@ package com.dnd.backend.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
+import com.dnd.backend.constant.UserRole;
+import com.dnd.backend.mapper.DungeonMasterMapper;
+import org.springframework.stereotype.Service;
 
 import com.dnd.backend.domain.Campaign;
 import com.dnd.backend.domain.DungeonMaster;
@@ -14,36 +16,46 @@ import com.dnd.backend.service.DungeonMasterService;
 
 import jakarta.transaction.Transactional;
 
+@Service
 public class DungeonMasterServiceImpl implements DungeonMasterService {
     
     private final DungeonMasterRepository dungeonMasterRepository;
     private final CampaignRepository campaignRepository;
 
-    private final ModelMapper modelMapper;
+    private final DungeonMasterMapper mapper;
 
-    public DungeonMasterServiceImpl(DungeonMasterRepository dungeonMasterRepository, CampaignRepository campaignRepository, ModelMapper modelMapper) {
+    public DungeonMasterServiceImpl(
+            DungeonMasterRepository dungeonMasterRepository,
+            CampaignRepository campaignRepository,
+            DungeonMasterMapper mapper
+    ) {
         this.dungeonMasterRepository = dungeonMasterRepository;
         this.campaignRepository = campaignRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Override
     public List<DungeonMasterDTO> findAllDungeonMasters() {
         return dungeonMasterRepository.findAll().stream()
-            .map(dungeonMaster -> modelMapper.map(dungeonMaster, DungeonMasterDTO.class))
+            .map(mapper::mapDungeonMasterToDto)
             .toList();
     }
 
     @Override
     public Optional<DungeonMasterDTO> findDungeonMasterById(Long id) {
         Optional<DungeonMaster> dungeonMaster = dungeonMasterRepository.findById(id);
-        return dungeonMaster.map(master -> modelMapper.map(master, DungeonMasterDTO.class));
+        return dungeonMaster.map(mapper::mapDungeonMasterToDto);
     }
 
     @Override
     public DungeonMasterDTO createDungeonMaster(DungeonMasterDTO dungeonMasterDTO) {
-        DungeonMaster dm = dungeonMasterRepository.save(modelMapper.map(dungeonMasterDTO, DungeonMaster.class));
-        return modelMapper.map(dm, DungeonMasterDTO.class);
+        DungeonMaster newDm = DungeonMaster.builder()
+                .username(dungeonMasterDTO.username())
+                .email(dungeonMasterDTO.email())
+                .password(dungeonMasterDTO.password())
+                .build();
+        DungeonMaster savedDm = dungeonMasterRepository.save(newDm);
+        return mapper.mapDungeonMasterToDto(savedDm);
     }
 
     @Override
@@ -58,7 +70,7 @@ public class DungeonMasterServiceImpl implements DungeonMasterService {
             dungeonMaster.setEmail(dungeonMasterDTO.email());
 
             dungeonMasterRepository.save(dungeonMaster);
-            return Optional.of(dungeonMasterDTO);
+            return Optional.of(mapper.mapDungeonMasterToDto(dungeonMaster));
         }
         
         return Optional.empty();
@@ -71,7 +83,7 @@ public class DungeonMasterServiceImpl implements DungeonMasterService {
 
     public Optional<DungeonMasterDTO> findDungeonMasterByUsername(String username) {
         Optional<DungeonMaster> dungeonMaster = dungeonMasterRepository.findByUsername(username);
-        return dungeonMaster.map(master -> modelMapper.map(master, DungeonMasterDTO.class));
+        return dungeonMaster.map(mapper::mapDungeonMasterToDto);
     }
 
     @Transactional
@@ -84,7 +96,7 @@ public class DungeonMasterServiceImpl implements DungeonMasterService {
 
             campaignRepository.save(campaign.get());
 
-            return dungeonMaster.map(dm -> modelMapper.map(dm, DungeonMasterDTO.class));
+            return dungeonMaster.map(mapper::mapDungeonMasterToDto);
         }
 
         return Optional.empty();
@@ -98,7 +110,7 @@ public class DungeonMasterServiceImpl implements DungeonMasterService {
             dungeonMaster.get().removeHostedCampaign(campaignId);
             dungeonMasterRepository.save(dungeonMaster.get());
 
-            return dungeonMaster.map(dm -> modelMapper.map(dm, DungeonMasterDTO.class));
+            return dungeonMaster.map(mapper::mapDungeonMasterToDto);
         }
         
         return Optional.empty();

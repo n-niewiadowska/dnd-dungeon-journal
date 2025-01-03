@@ -3,7 +3,7 @@ package com.dnd.backend.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
+import com.dnd.backend.mapper.SessionMapper;
 import org.springframework.stereotype.Service;
 
 import com.dnd.backend.domain.Player;
@@ -21,35 +21,40 @@ public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
     private final PlayerRepository playerRepository;
 
-    private final ModelMapper modelMapper;
+    private final SessionMapper mapper;
 
     public SessionServiceImpl(
-            SessionRepository sessionRepository, 
-            PlayerRepository playerRepository, 
-            ModelMapper modelMapper
+            SessionRepository sessionRepository,
+            PlayerRepository playerRepository,
+            SessionMapper mapper
     ) {
         this.sessionRepository = sessionRepository;
         this.playerRepository = playerRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
     
     @Override
     public List<SessionDTO> findAllSessions() {
         return sessionRepository.findAll().stream()
-                .map(session -> modelMapper.map(session, SessionDTO.class))
+                .map(mapper::mapSessionToDto)
                 .toList();
-    };
+    }
 
     @Override
     public Optional<SessionDTO> findSessionById(Long id) {
         Optional<Session> foundSession = sessionRepository.findById(id);
-        return foundSession.map(session -> modelMapper.map(session, SessionDTO.class));
+        return foundSession.map(mapper::mapSessionToDto);
     }
 
     @Override
     public SessionDTO createSession(SessionDTO sessionDTO) {
-        Session savedSession = sessionRepository.save(modelMapper.map(sessionDTO, Session.class));
-        return modelMapper.map(savedSession, SessionDTO.class);
+        Session newSession = Session.builder()
+                .sessionDate(sessionDTO.sessionDate())
+                .notes(sessionDTO.notes())
+                .campaign(mapper.mapDtoToSession(sessionDTO).getCampaign())
+                .build();
+        Session savedSession = sessionRepository.save(newSession);
+        return mapper.mapSessionToDto(savedSession);
     }
 
     @Override
@@ -60,14 +65,12 @@ public class SessionServiceImpl implements SessionService {
         if (existingSession.isPresent()) {
             Session session = existingSession.get();
 
-            session.toBuilder()
-                .sessionDate(sessionDTO.sessionDate())
-                .notes(sessionDTO.notes())
-                .campaign(sessionDTO.campaign())
-                .build();
+            session.setSessionDate(sessionDTO.sessionDate());
+            session.setNotes(sessionDTO.notes());
+            session.setCampaign(mapper.mapDtoToSession(sessionDTO).getCampaign());
 
             sessionRepository.save(session);
-            return Optional.of(modelMapper.map(session, SessionDTO.class));
+            return Optional.of(mapper.mapSessionToDto(session));
         }
         
         return Optional.empty();
@@ -81,7 +84,7 @@ public class SessionServiceImpl implements SessionService {
 
     public List<SessionDTO> findSessionsByCampaignTitle(String campaignTitle) {
         return sessionRepository.findByCampaignTitle(campaignTitle).stream()
-            .map(session -> modelMapper.map(campaignTitle, SessionDTO.class))
+            .map(mapper::mapSessionToDto)
             .toList();
     }
 
@@ -90,11 +93,11 @@ public class SessionServiceImpl implements SessionService {
         Optional<Session> session = sessionRepository.findById(sessionId);
         Optional<Player> player = playerRepository.findById(playerId);
 
-        if (session.isPresent() && session.isPresent()) {
+        if (session.isPresent() && player.isPresent()) {
             session.get().addAttendee(player.get());
 
             sessionRepository.save(session.get());
-            return session.map(s -> modelMapper.map(s, SessionDTO.class));
+            return session.map(mapper::mapSessionToDto);
         }
 
         return Optional.empty();
@@ -108,7 +111,7 @@ public class SessionServiceImpl implements SessionService {
             session.get().removeAttendee(playerId);
             sessionRepository.save(session.get());
 
-            return session.map(s -> modelMapper.map(s, SessionDTO.class));
+            return session.map(mapper::mapSessionToDto);
         }
         
         return Optional.empty();

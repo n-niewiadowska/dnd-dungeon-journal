@@ -8,5 +8,5 @@ public record PlayerDTO(
     String username,
     String email,
     @JsonIgnore String password,
-    DndCharacter character
+    DndCharacterDTO character
 ) {}
