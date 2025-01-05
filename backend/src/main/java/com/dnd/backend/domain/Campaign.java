@@ -7,6 +7,7 @@ import java.util.List;
 import com.dnd.backend.constant.GameStatus;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,12 +26,13 @@ public class Campaign {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotNull
+    @NotNull(message = "Title is required")
+    @NotBlank(message = "Title is required")
     @Column(unique = true)
     private String title;
     private String description;
 
-    @NotNull
+//    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private DungeonMaster dungeonMaster;
 

@@ -18,7 +18,10 @@ public class CampaignSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             if (params.containsKey("title")) {
-                predicates.add(builder.like(root.get("title"), params.get("title")));
+                String title = params.get("title").trim();
+                if (!title.isEmpty()) {
+                    predicates.add(builder.like(builder.lower(root.get("title")), "%" + title.toLowerCase() + "%"));
+                }
             }
 
             if (params.containsKey("status")) {
