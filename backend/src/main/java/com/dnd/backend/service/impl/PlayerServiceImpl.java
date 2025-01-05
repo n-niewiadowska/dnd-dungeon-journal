@@ -3,6 +3,7 @@ package com.dnd.backend.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.dnd.backend.constant.UserRole;
 import com.dnd.backend.mapper.PlayerMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class PlayerServiceImpl implements PlayerService {
                 .username(playerDTO.username())
                 .email(playerDTO.email())
                 .password(playerDTO.password())
+                .role(UserRole.PLAYER)
                 .character(mapper.mapDtoToPlayer(playerDTO).getCharacter())
                 .build();
         Player savedPlayer = playerRepository.save(newPlayer);

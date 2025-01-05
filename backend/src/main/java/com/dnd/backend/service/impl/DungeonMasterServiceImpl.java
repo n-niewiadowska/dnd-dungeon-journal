@@ -53,6 +53,7 @@ public class DungeonMasterServiceImpl implements DungeonMasterService {
                 .username(dungeonMasterDTO.username())
                 .email(dungeonMasterDTO.email())
                 .password(dungeonMasterDTO.password())
+                .role(UserRole.DUNGEON_MASTER)
                 .build();
         DungeonMaster savedDm = dungeonMasterRepository.save(newDm);
         return mapper.mapDungeonMasterToDto(savedDm);

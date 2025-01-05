@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.dnd.backend.constant.CharacterClass;
 import com.dnd.backend.domain.DndCharacter;
 
 @Repository
