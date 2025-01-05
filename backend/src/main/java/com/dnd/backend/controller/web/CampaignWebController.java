@@ -63,8 +63,7 @@ public class CampaignWebController {
 
     @GetMapping("/new")
     public String showAddCampaignForm(Model model) {
-        DungeonMasterDTO dm = dungeonMasterService.findDungeonMasterById(1L).get();
-        model.addAttribute("campaign", new CampaignDTO(null, "", "", dm, null, GameStatus.PLANNED));
+        model.addAttribute("campaign", new CampaignDTO(null, "", "", null, null, GameStatus.PLANNED));
         model.addAttribute("statuses", GameStatus.values());
         return "campaign/form";
     }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Search</title>
+</head>
+<body>
+<div class="header">
+    <img src="/dnd-logo.png" alt="logo"/>
+    <h1>Campaign Search</h1>
+</div>
+<div class="content">
+    <form class="search-form campaign-btn" method="get" th:action="@{/search}">
+        <label for="title">Search by title:</label>
+        <input type="text" name="title" id="title" placeholder="Enter title" th:value="${filters['title']}" />
+
+        <label>Campaign's status:</label><br>
+        <div th:each="status : ${statuses}">
+            <input type="checkbox" th:attr="data-status=${status}" onchange="updateStatuses()" />
+            <span th:text="${status}"></span><br>
+        </div>
+        <input type="hidden" id="status-hidden" name="status" th:value="${filters['status']}" />
+
+        <label for="sort">Sort by:</label>
+        <select name="sort" id="sort">
+            <option value="title,ASC" th:selected="${filters['sort'] == 'title,ASC'}">Title (A-Z)</option>
+            <option value="title,DESC" th:selected="${filters['sort'] == 'title,DESC'}">Title (Z-A)</option>
+            <option value="beginningDate,ASC" th:selected="${filters['sort'] == 'beginningDate,ASC'}">Beginning date (from oldest)</option>
+            <option value="beginningDate,DESC" th:selected="${filters['sort'] == 'beginningDate,DESC'}">Beginning date (from newest)</option>
+        </select>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="list">
+
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="campaign : ${campaigns}">
+                <td th:text="${campaign.title}"></td>
+                <td th:text="${campaign.description}"></td>
+                <td th:text="${campaign.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <a th:href="@{/search(page=${currentPage - 1}, title=${filters['title']}, statuses=${filters['statuses']}, sort=${filters['sort']})}" th:if="${currentPage > 0}">Previous</a>
+            <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${totalPages}"></span>
+            <a th:href="@{/search(page=${currentPage + 1}, title=${filters['title']}, statuses=${filters['statuses']}, sort=${filters['sort']})}" th:if="${currentPage < totalPages - 1}">Next</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateStatuses() {
+        const selectedStatuses = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+            .map(checkbox => checkbox.getAttribute("data-status"))
+            .join(",");
+        document.getElementById("status-hidden").value = selectedStatuses;
+    }
+</script>
+</body>
+</html>
