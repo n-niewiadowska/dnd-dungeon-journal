@@ -6,12 +6,11 @@ import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = DungeonMasterMapper.class, builder = @Builder(disableBuilder = true))
+@Mapper(componentModel = "spring", uses = DndCharacterMapper.class, builder = @Builder(disableBuilder = true))
 public interface CampaignMapper {
 
    CampaignDTO mapCampaignToDto(Campaign campaign);
 
-   @Mapping(target = "players", ignore = true)
    @Mapping(target = "sessions", ignore = true)
    Campaign mapDtoToCampaign(CampaignDTO dto);
 }

@@ -13,7 +13,8 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     List<Session> findByCampaignTitle(String campaignTitle);
 
-    @Query("SELECT s.id, COUNT(a) FROM Session s LEFT JOIN s.attendees a GROUP BY s.id")
-    List<Object[]> countAttendeesForEverySession();
-
+    @Query("SELECT c.id, c.title, COUNT(s.id) AS sessionCount FROM Session s " +
+            "JOIN s.campaign c " +
+            "GROUP BY c.id, c.title")
+    List<Object[]> findSessionCountByCampaign();
 }

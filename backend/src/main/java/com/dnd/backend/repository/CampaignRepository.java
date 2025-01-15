@@ -2,6 +2,7 @@ package com.dnd.backend.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,25 +15,16 @@ import com.dnd.backend.domain.Campaign;
 @Repository
 public interface CampaignRepository extends JpaRepository<Campaign, Long>, JpaSpecificationExecutor<Campaign> {
 
-    List<Campaign> findByDungeonMasterUsername(String dungeonMasterUsername);
+    Optional<Campaign> findByTitle(String title);
 
-    @Query("SELECT COUNT(c) FROM Campaign c JOIN c.dungeonMaster dm WHERE dm.id = :dmId")
-    Integer countCampaignsByDungeonMaster(@Param("dmId") Long dmId);
+    Optional<Campaign> findByTitleAndStatus(String title, String status);
 
     @Query(value = "SELECT title FROM Campaign WHERE status = 'PLANNED' AND beginning_date > :date", nativeQuery = true)
     List<String> findPlannedCampaignTitlesAfterDate(@Param("date") LocalDate date);
 
-    @Query("""
-        SELECT AVG(playersCount)
-        FROM (
-            SELECT COUNT(a) AS playersCount
-            FROM Campaign c
-            JOIN c.sessions s
-            JOIN s.attendees a
-            WHERE c.id = :campaignId
-            GROUP BY s.id
-        ) AS sessionCounts
-    """)
-    Double findAverageNumberOfPlayersPerSessionInCampaign(@Param("campaignId") Long campaignId);
-
+    @Query("SELECT c.id, c.title, COUNT(cs.id) AS characterCount FROM Campaign c " +
+            "JOIN c.characters cs " +
+            "GROUP BY c.id, c.title " +
+            "HAVING COUNT(cs.id) >= :minCharacters")
+    List<Object[]> findCampaignsWithMinimumCharacterCount(@Param("minCharacters") int minCharacters);
 } 
