@@ -6,31 +6,35 @@
     <title>Campaign Form</title>
 </head>
 <body>
-<div class="header">
-    <img src="/dnd-logo.png" alt="logo"/>
-    <h1 th:text="${campaign.id == null} ? 'Add Campaign' : 'Edit Campaign'"></h1>
-</div>
-<div class="content">
-    <form class="campaign-form campaign-btn" th:action="${campaign.id == null} ? '/new' : '/edit/' + ${campaign.id}" th:object="${campaign}" method="post">
-        <label for="title">Title:</label>
-        <input type="text" id="title" th:field="*{title}"/>
-        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span><br/>
+    <div class="header">
+        <img src="/dnd-logo.png" alt="logo"/>
+        <h1 th:text="${campaign.id == null} ? 'Add Campaign' : 'Edit Campaign'"></h1>
+    </div>
+    <div class="content">
+        <form class="campaign-form campaign-btn"
+              th:action="|${campaign.id == null ? '/campaign/new' : '/campaign/edit/' + campaign.id}|"
+              th:object="${campaign}" method="post"
+        >
+            <label for="title">Title:</label>
+            <input type="text" id="title" th:field="*{title}"/>
+            <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span><br/>
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" th:field="*{description}"/><br/>
+            <label for="description">Description:</label>
+            <input type="text" id="description" th:field="*{description}"/><br/>
 
-        <label for="status">Status:</label>
-        <select id="status" th:field="*{status}">
-            <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
-        </select>
-        <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span><br/>
+            <label for="status">Status:</label>
+            <select id="status" th:field="*{status}">
+                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+            </select>
+            <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span><br/>
 
-        <label for="beginningDate">Beginning Date:</label>
-        <input type="date" id="beginningDate" th:field="*{beginningDate}"/>
-        <span th:if="${#fields.hasErrors('beginningDate')}" th:errors="*{beginningDate}"></span><br/>
+            <label for="beginningDate">Beginning Date:</label>
+            <input type="date" id="beginningDate" th:field="*{beginningDate}"/>
+            <span th:if="${#fields.hasErrors('beginningDate')}" th:errors="*{beginningDate}"></span><br/>
 
-        <button type="submit">Submit</button>
-    </form>
-</div>
+            <button type="submit">Submit</button>
+            <button type="button" onclick="location.href='/campaign'">Back</button>
+        </form>
+    </div>
 </body>
 </html>

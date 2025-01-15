@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Find sessions</title>
+</head>
+<body>
+    <div class="header">
+        <img src="/dnd-logo.png" alt="logo"/>
+        <h1>Sessions</h1>
+    </div>
+    <div class="content">
+        <form class="character-btn" action="#" th:action="@{/session}" method="get">
+            <label for="title">Choose a campaign:</label>
+            <select name="title" id="title">
+                <option th:each="campaign : ${campaigns}"
+                        th:value="${campaign.title}"
+                        th:text="${campaign.title}"></option>
+            </select>
+            <button type="submit">Show Sessions</button>
+            <button type="button" onclick="location.href='/'">Back</button>
+        </form>
+    </div>
+</body>
+</html>

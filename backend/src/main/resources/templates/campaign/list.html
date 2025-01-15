@@ -6,45 +6,46 @@
     <title>Campaigns</title>
 </head>
 <body>
-<div class="header">
-    <img src="/dnd-logo.png" alt="logo"/>
-    <h1>Campaigns</h1>
-</div>
-<div class="content">
-    <div class="list campaign-btn">
-        <button onclick="location.href='/new'">Add campaign</button>
-        <table>
-            <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="campaign : ${campaigns}">
-                <td th:text="${campaign.title}"></td>
-                <td th:text="${campaign.description}"></td>
-                <td th:text="${campaign.status}"></td>
-                <td class="campaign-btn">
-                    <a class="campaign-btn" th:href="@{/edit/{id}(id=${campaign.id})}">
-                        <button type="button">Edit</button>
-                    </a>
-                    <button type="button" th:onclick="'deleteCampaign(' + ${campaign.id} + ')'">Delete</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="header">
+        <img src="/dnd-logo.png" alt="logo"/>
+        <h1>Campaigns</h1>
     </div>
-</div>
+    <div class="content">
+        <div class="list campaign-btn">
+            <button onclick="location.href='/campaign/new'">Add campaign</button>
+            <button type="button" onclick="location.href='/'">Back</button>
+            <table>
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="campaign : ${campaigns}">
+                    <td th:text="${campaign.title}"></td>
+                    <td th:text="${campaign.description}"></td>
+                    <td th:text="${campaign.status}"></td>
+                    <td class="campaign-btn">
+                        <a class="campaign-btn" th:href="@{/campaign/edit/{id}(id=${campaign.id})}">
+                            <button type="button">Edit</button>
+                        </a>
+                        <button type="button" th:onclick="'deleteCampaign(' + ${campaign.id} + ')'">Delete</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<script>
-    function deleteCampaign(campaignId) {
-        if (confirm('Are you sure you want to delete this campaign?')) {
-            window.location.href = '/delete/' + campaignId;
+    <script>
+        function deleteCampaign(campaignId) {
+            if (confirm('Are you sure you want to delete this campaign?')) {
+                window.location.href = '/campaign/delete/' + campaignId;
+            }
         }
-    }
-</script>
+    </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+/* --- GLOBAL --- */
 body {
     background-color: rgb(84, 68, 64);
     color: white;
@@ -5,12 +6,12 @@ body {
     margin: 0;
 }
 
+/* --- HEADER --- */
 .header {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
     width: 100%;
     background-color: rgb(51, 42, 39);
 }
@@ -20,6 +21,7 @@ img {
     width: 200px;
 }
 
+/* --- CONTENT --- */
 .content {
     display: flex;
     flex-direction: row;
@@ -27,25 +29,6 @@ img {
     align-items: center;
     gap: 4rem;
     padding: 2rem;
-}
-
-button, select {
-    font-family: "Georgia", serif;
-    color: white;
-    padding: 1rem;
-
-    border-radius: 10%;
-    cursor: pointer;
-}
-
-.campaign-btn > button {
-    border: 1px solid white;
-    background-color: rgb(51, 42, 39);
-}
-
-.auth-btn > button {
-    border: 1px solid rgb(51, 42, 39);
-    background-color: rgb(112, 92, 85);
 }
 
 .list {
@@ -57,10 +40,31 @@ button, select {
     width: 700px;
 }
 
-th, td {
-    border-style: dotted;
-    border-color: white;
-    padding: 2rem;
+.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* --- FORM --- */
+button, select {
+    font-family: "Georgia", serif;
+    color: white;
+    padding: 1rem;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.campaign-btn > button {
+    border: 1px solid white;
+    background-color: rgb(51, 42, 39);
+}
+
+.character-btn > button {
+    border: 1px solid rgb(51, 42, 39);
+    background-color: rgb(112, 92, 85);
 }
 
 .campaign-form, .search-form {
@@ -88,4 +92,15 @@ a {
 
 a:hover, a:active {
     color: rgb(112, 92, 85);
+}
+
+/* --- TEXT --- */
+.head {
+    font-weight: bold;
+}
+
+th, td {
+    border-style: dotted;
+    border-color: white;
+    padding: 2rem;
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Sessions</title>
+</head>
+<body>
+    <div class="header">
+        <img src="/dnd-logo.png" alt="logo"/>
+        <h1>Sessions</h1>
+    </div>
+    <div class="content">
+        <div class="list character-btn">
+            <button type="button" onclick="location.href='/session/campaign'">Back</button>
+            <div th:each="dndSession : ${sessions}">
+                <p class="head" th:text="${dndSession.campaign.title}"></p>
+                <p th:text="${'date of the session:' + dndSession.sessionDate}"></p>
+                <p th:text="${dndSession.notes}"></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

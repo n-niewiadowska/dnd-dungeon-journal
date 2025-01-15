@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Characters</title>
+</head>
+<body>
+    <div class="header">
+        <img src="/dnd-logo.png" alt="logo"/>
+        <h1>Characters</h1>
+    </div>
+    <div class="content">
+        <div class="list character-btn">
+            <button type="button" onclick="location.href='/'">Back</button>
+            <table>
+                <thead>
+                <tr>
+                    <th>Full name</th>
+                    <th>Class</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="character : ${characters}">
+                    <td th:text="${character.firstName} + ' ' + ${character.lastName}"></td>
+                    <td th:text="${character.dndClass}"></td>
+                    <td>
+                        <a class="character-btn" th:href="@{/character/{id}(id=${character.id})}">
+                            <button type="button">See details</button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
