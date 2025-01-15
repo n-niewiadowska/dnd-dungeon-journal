@@ -3,38 +3,26 @@ package com.dnd.backend.domain;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.dnd.backend.constant.GameStatus;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Getter
-@Setter
+@Data
 @Entity
 public class Campaign {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @NotNull(message = "Title is required")
-    @NotBlank(message = "Title is required")
+
     @Column(unique = true)
     private String title;
     private String description;
-
-//    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    private DungeonMaster dungeonMaster;
 
     private LocalDate beginningDate;
 
@@ -42,27 +30,26 @@ public class Campaign {
     private GameStatus status;
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Player> players = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    private List<DndCharacter> characters = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "campaign", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Session> sessions = new ArrayList<>();
 
-    public Campaign(String title, String description, DungeonMaster dungeonMaster, LocalDate beginningDate, GameStatus status) {
+    public Campaign(String title, String description, LocalDate beginningDate, GameStatus status) {
         this.title = title;
         this.description = description;
-        this.dungeonMaster = dungeonMaster;
         this.beginningDate = beginningDate;
         this.status = status;
     }
 
-    public void addPlayer(Player player) {
-        this.players.add(player);
+    public void addCharacter(DndCharacter player) {
+        this.characters.add(player);
     }
 
-    public void removePlayer(Long id) {
-        this.players.removeIf(player -> player.getId() == id);
+    public void removeCharacter(Long id) {
+        this.characters.removeIf(character -> Objects.equals(character.getId(), id));
     }
 
     public void addSession(Session session) {
@@ -70,6 +57,6 @@ public class Campaign {
     }
 
     public void removeSession(Long id) {
-        this.sessions.removeIf(session -> session.getId() == id);
+        this.sessions.removeIf(session -> Objects.equals(session.getId(), id));
     }
 }
