@@ -5,8 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.dnd.backend.constant.GameStatus;
-import com.dnd.backend.domain.DungeonMaster;
-import com.dnd.backend.dto.DungeonMasterDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,21 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dnd.backend.dto.CampaignDTO;
-import com.dnd.backend.service.impl.CampaignServiceImpl;
-import com.dnd.backend.service.impl.DungeonMasterServiceImpl;
+import com.dnd.backend.service.CampaignService;
 
 import jakarta.validation.Valid;
 
 @Controller
+@RequiredArgsConstructor
 public class CampaignWebController {
     
-    private final CampaignServiceImpl campaignService;
-    private final DungeonMasterServiceImpl dungeonMasterService;
-
-    public CampaignWebController(CampaignServiceImpl campaignService, DungeonMasterServiceImpl dungeonMasterService) {
-        this.campaignService = campaignService;
-        this.dungeonMasterService = dungeonMasterService;
-    }
+    private final CampaignService campaignService;
 
     @GetMapping("/")
     public String getHomePage() {
@@ -46,7 +39,7 @@ public class CampaignWebController {
         return "campaign/list";
     }
 
-    @GetMapping("/search")
+    @GetMapping("/campaign/search")
     public String searchCampaignsWithFilterSortAndPagination(@RequestParam Map<String, String> params, Model model) {
         Page<CampaignDTO> campaigns = campaignService.searchCampaignsWithFilterSortAndPagination(params);
 
@@ -61,14 +54,15 @@ public class CampaignWebController {
         return "campaign/search";
     }
 
-    @GetMapping("/new")
+
+    @GetMapping("/campaign/new")
     public String showAddCampaignForm(Model model) {
-        model.addAttribute("campaign", new CampaignDTO(null, "", "", null, null, GameStatus.PLANNED));
+        model.addAttribute("campaign", new CampaignDTO(null, "", "", null, GameStatus.PLANNED, null));
         model.addAttribute("statuses", GameStatus.values());
         return "campaign/form";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/campaign/edit/{id}")
     public String showEditCampaignForm(@PathVariable Long id, Model model) {
         Optional<CampaignDTO> existingCampaign = campaignService.findCampaignById(id);
         if (existingCampaign.isPresent()) {
@@ -80,7 +74,7 @@ public class CampaignWebController {
         return "redirect:/campaign";
     }
 
-    @PostMapping("/new")
+    @PostMapping("/campaign/new")
     public String addCampaign(@Valid @ModelAttribute CampaignDTO campaignDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "campaign/form";
@@ -89,8 +83,7 @@ public class CampaignWebController {
         return "redirect:/campaign";
     }
 
-
-    @PostMapping("/edit/{id}")
+    @PostMapping("/campaign/edit/{id}")
     public String updateCampaign(@PathVariable Long id, @Valid @ModelAttribute CampaignDTO campaignDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "campaign/form";
@@ -99,10 +92,17 @@ public class CampaignWebController {
         return "redirect:/campaign";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/campaign/delete/{id}")
     public String deleteCampaign(@PathVariable Long id) {
         campaignService.deleteCampaign(id);
-        // dungeonMasterService.removeHostedCampaign(id, id);
         return "redirect:/campaign";
+    }
+
+    @GetMapping("/session/campaign")
+    public String getCampaignsForSessions(Model model) {
+        List<CampaignDTO> campaigns = campaignService.findAllCampaigns();
+        model.addAttribute("campaigns", campaigns);
+        model.addAttribute("title", "");
+        return "session/find";
     }
 }
