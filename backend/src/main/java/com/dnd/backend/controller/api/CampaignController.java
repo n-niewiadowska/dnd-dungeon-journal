@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,22 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dnd.backend.dto.CampaignDTO;
-import com.dnd.backend.service.impl.CampaignServiceImpl;
-import com.dnd.backend.service.impl.DungeonMasterServiceImpl;
+import com.dnd.backend.service.CampaignService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/campaign")
+@RequiredArgsConstructor
 public class CampaignController {
     
-    private final CampaignServiceImpl campaignService;
-    private final DungeonMasterServiceImpl dungeonMasterService;
-
-    public CampaignController(CampaignServiceImpl campaignService, DungeonMasterServiceImpl dungeonMasterService) {
-        this.campaignService = campaignService;
-        this.dungeonMasterService = dungeonMasterService;
-    }
+    private final CampaignService campaignService;
 
     // GET requests
 
@@ -52,28 +47,10 @@ public class CampaignController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/dm/{username}")
-    public ResponseEntity<List<CampaignDTO>> getCampaignsByDungeonMaster(@PathVariable String username) {
-        List<CampaignDTO> campaigns = campaignService.findCampaignsByDungeonMasterUsername(username);
-        return ResponseEntity.ok(campaigns);
-    }
-
-    @GetMapping("/dm/count/{dmId}")
-    public ResponseEntity<Integer> getCampaignCountForDungeonMaster(@PathVariable Long dmId) {
-        Integer count = campaignService.getCountOfCampaignsForDungeonMaster(dmId);
-        return ResponseEntity.ok(count);
-    }
-
     @GetMapping("/planned")
     public ResponseEntity<List<String>> getPlannedCampaignTitles(@RequestParam("date") String date) {
         List<String> titles = campaignService.findPlannedCampaignTitlesInFuture(LocalDate.parse(date));
         return ResponseEntity.ok(titles);
-    }
-
-    @GetMapping("/{campaignId}/players/avg")
-    public ResponseEntity<Double> getAveragePlayersInCampaignSessions(@PathVariable Long campaignId) {
-        Double average = campaignService.getAverageOfPlayersPresenceInCampaignSessions(campaignId);
-        return ResponseEntity.ok(average);
     }
 
     @GetMapping("/search")
@@ -81,12 +58,24 @@ public class CampaignController {
         return ResponseEntity.ok(campaignService.searchCampaignsWithFilterSortAndPagination(params));
     }
 
+    @GetMapping("/title")
+    public ResponseEntity<CampaignDTO> getCampaignByTitle(@RequestParam String title) {
+        Optional<CampaignDTO> campaign = campaignService.findCampaignByTitle(title);
+        return campaign.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/characters/{count}")
+    public ResponseEntity<List<Object[]>> getCampainsWithMinimumCharacters(@PathVariable String count) {
+        List<Object[]> campaigns = campaignService.findCampaignsByCharacterCount(Integer.parseInt(count));
+        return ResponseEntity.ok(campaigns);
+    }
+
     // POST and PUT requests
 
     @PostMapping
     public ResponseEntity<CampaignDTO> createCampaign(@RequestBody @Valid CampaignDTO campaignDTO) {
         CampaignDTO createdCampaign = campaignService.createCampaign(campaignDTO);
-        dungeonMasterService.addHostedCampaign(createdCampaign.dungeonMaster().id() ,createdCampaign.id());
         URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .build().toUri();
@@ -94,9 +83,9 @@ public class CampaignController {
         return ResponseEntity.created(location).body(createdCampaign);
     }
 
-    @PostMapping("/{campaignId}/players/{playerId}")
-    public ResponseEntity<CampaignDTO> addPlayerToCampaign(@PathVariable Long campaignId, @PathVariable Long playerId) {
-        Optional<CampaignDTO> updatedCampaign = campaignService.addPlayerToCampaign(campaignId, playerId);
+    @PostMapping("/{campaignId}/characters/{characterId}")
+    public ResponseEntity<CampaignDTO> addCharacterToCampaign(@PathVariable Long campaignId, @PathVariable Long characterId) {
+        Optional<CampaignDTO> updatedCampaign = campaignService.addCharacterToCampaign(campaignId, characterId);
         return updatedCampaign.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -122,24 +111,21 @@ public class CampaignController {
         Optional<CampaignDTO> campaign = campaignService.findCampaignById(id);
         if (campaign.isPresent()) {
             campaignService.deleteCampaign(id);
-            dungeonMasterService.removeHostedCampaign(campaign.get().dungeonMaster().id(), id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("/{campaignId}/players/{playerId}")
-    public ResponseEntity<CampaignDTO> removePlayerFromCampaign(@PathVariable Long campaignId, @PathVariable Long playerId) {
-        Optional<CampaignDTO> updatedCampaign = campaignService.removePlayerFromCampaign(campaignId, playerId);
-        return updatedCampaign.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @DeleteMapping("/{campaignId}/characters/{characterId}")
+    public ResponseEntity<?> removeCharacterFromCampaign(@PathVariable Long campaignId, @PathVariable Long characterId) {
+        campaignService.removeCharacterFromCampaign(campaignId, characterId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{campaignId}/sessions/{sessionId}")
-    public ResponseEntity<CampaignDTO> removeSessionFromCampaign(@PathVariable Long campaignId, @PathVariable Long sessionId) {
-        Optional<CampaignDTO> updatedCampaign = campaignService.removeSessionFromCampaign(campaignId, sessionId);
-        return updatedCampaign.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<?> removeSessionFromCampaign(@PathVariable Long campaignId, @PathVariable Long sessionId) {
+        campaignService.removeSessionFromCampaign(campaignId, sessionId);
+        return ResponseEntity.noContent().build();
     }
 }
