@@ -38,9 +38,8 @@ public class MainSkillService {
     }
 
     public MainSkillDTO createSkill(MainSkillDTO mainSkillDTO) {
-        MainItem item = mainSkillDTO.associatedItem() == null
-                ? null
-                : itemRepository.findById(mainSkillDTO.associatedItem().id()).orElse(null);
+        MainItem item = mapper.mapDtoToSkill(mainSkillDTO).getAssociatedItem();
+        MainItem existingItem = itemRepository.findByName(item.getName()).orElse(itemRepository.save(item));
 
         MainSkill newSkill = MainSkill.builder()
                 .name(mainSkillDTO.name())
@@ -48,7 +47,7 @@ public class MainSkillService {
                 .description(mainSkillDTO.description())
                 .level(mainSkillDTO.level())
                 .effect(mainSkillDTO.effect())
-                .associatedItem(item)
+                .associatedItem(existingItem)
                 .build();
 
         MainSkill savedSkill = skillRepository.save(newSkill);
@@ -60,18 +59,15 @@ public class MainSkillService {
 
         if (existingSkill.isPresent()) {
             MainSkill skill = existingSkill.get();
-            MainItem item = mainSkillDTO.associatedItem() == null
-                    ? null
-                    : itemRepository.findById(mainSkillDTO.associatedItem().id()).orElse(null);
+            MainItem item = mapper.mapDtoToSkill(mainSkillDTO).getAssociatedItem();
+            MainItem existingItem = itemRepository.findByName(item.getName()).orElse(itemRepository.save(item));
 
             skill.setName(mainSkillDTO.name());
             skill.setRelatedAbility(mainSkillDTO.relatedAbility());
             skill.setDescription(mainSkillDTO.description());
             skill.setLevel(mainSkillDTO.level());
             skill.setEffect(mainSkillDTO.effect());
-            if (item != null) {
-                skill.setAssociatedItem(item);
-            }
+            skill.setAssociatedItem(existingItem);
 
             skillRepository.save(skill);
             return Optional.of(mapper.mapSkillToDto(skill));

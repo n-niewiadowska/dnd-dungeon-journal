@@ -40,8 +40,8 @@ public class DndCharacterService {
     }
 
     public DndCharacterDTO createCharacter(DndCharacterDTO dndCharacterDTO) {
-        MainSkill skill = dndCharacterDTO.skill() == null ?
-                null : skillRepository.findById(dndCharacterDTO.skill().id()).orElse(null);
+        MainSkill skill = mapper.mapDtoToCharacter(dndCharacterDTO).getSkill();
+        MainSkill existingSkill = skillRepository.findByName(skill.getName()).orElse(skillRepository.save(skill));
 
         DndCharacter newCharacter = DndCharacter.builder()
                 .firstName(dndCharacterDTO.firstName())
@@ -50,7 +50,7 @@ public class DndCharacterService {
                 .race(dndCharacterDTO.race())
                 .age(dndCharacterDTO.age())
                 .canPerformMagic(dndCharacterDTO.canPerformMagic())
-                .skill(skill)
+                .skill(existingSkill)
                 .build();
 
         DndCharacter savedCharacter = dndCharacterRepository.save(newCharacter);
@@ -62,8 +62,8 @@ public class DndCharacterService {
 
         if (existingCharacter.isPresent()) {
             DndCharacter dndCharacter = existingCharacter.get();
-            MainSkill skill = dndCharacterDTO.skill() == null ?
-                    null : skillRepository.findById(dndCharacterDTO.skill().id()).orElse(null);
+            MainSkill skill = mapper.mapDtoToCharacter(dndCharacterDTO).getSkill();
+            MainSkill existingSkill = skillRepository.findByName(skill.getName()).orElse(skillRepository.save(skill));
 
             dndCharacter.setFirstName(dndCharacterDTO.firstName());
             dndCharacter.setLastName(dndCharacterDTO.lastName());
@@ -71,9 +71,7 @@ public class DndCharacterService {
             dndCharacter.setRace(dndCharacterDTO.race());
             dndCharacter.setAge(dndCharacterDTO.age());
             dndCharacter.setCanPerformMagic(dndCharacterDTO.canPerformMagic());
-            if (skill != null) {
-                dndCharacter.setSkill(skill);
-            }
+            dndCharacter.setSkill(existingSkill);
 
             dndCharacterRepository.save(dndCharacter);
             return Optional.of(mapper.mapCharacterToDto(dndCharacter));

@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface MainItemRepository extends JpaRepository<MainItem, Long> {
 
+    Optional<MainItem> findByName(String name);
+
     Optional<MainItem> findByNameAndBonusValue(String name, int bonusValue);
 
     @Query("SELECT item.id, item.name, item.bonusValue, skill.name AS skillName, skill.effect " +

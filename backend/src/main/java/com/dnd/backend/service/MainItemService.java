@@ -34,14 +34,14 @@ public class MainItemService {
     }
 
     public MainItemDTO createItem(MainItemDTO mainItemDTO) {
-        MainSkill skill = mainItemDTO.associatedSkill() == null ?
-            null : skillRepository.findById(mainItemDTO.associatedSkill().id()).orElse(null);
+        MainSkill skill = mapper.mapDtoToItem(mainItemDTO).getAssociatedSkill();
+        MainSkill existingSkill = skillRepository.findByName(skill.getName()).orElse(skillRepository.save(skill));
 
         MainItem newItem = MainItem.builder()
                 .name(mainItemDTO.name())
                 .description(mainItemDTO.description())
                 .bonusValue(mainItemDTO.bonusValue())
-                .associatedSkill(skill)
+                .associatedSkill(existingSkill)
                 .build();
 
         MainItem savedItem = itemRepository.save(newItem);
@@ -53,15 +53,13 @@ public class MainItemService {
 
         if (existingItem.isPresent()) {
             MainItem item = existingItem.get();
-            MainSkill skill = mainItemDTO.associatedSkill() == null ?
-                    null : skillRepository.findById(mainItemDTO.associatedSkill().id()).orElse(null);
+            MainSkill skill = mapper.mapDtoToItem(mainItemDTO).getAssociatedSkill();
+            MainSkill existingSkill = skillRepository.findByName(skill.getName()).orElse(skillRepository.save(skill));
 
             item.setName(mainItemDTO.name());
             item.setDescription(mainItemDTO.description());
             item.setBonusValue(mainItemDTO.bonusValue());
-            if (skill != null) {
-                item.setAssociatedSkill(skill);
-            }
+            item.setAssociatedSkill(existingSkill);
 
             itemRepository.save(item);
             return Optional.of(mapper.mapItemToDto(item));

@@ -37,13 +37,13 @@ public class SessionService {
     }
 
     public SessionDTO createSession(SessionDTO sessionDTO) {
-        Campaign campaign = sessionDTO.campaign() == null ?
-                null : campaignRepository.findById(sessionDTO.campaign().id()).orElse(null);
+        Campaign campaign = mapper.mapDtoToSession(sessionDTO).getCampaign();
+        Campaign existingCampaign = campaignRepository.findByTitle(campaign.getTitle()).orElse(campaignRepository.save(campaign));
 
         Session newSession = Session.builder()
                 .sessionDate(sessionDTO.sessionDate())
                 .notes(sessionDTO.notes())
-                .campaign(campaign)
+                .campaign(existingCampaign)
                 .build();
         Session savedSession = sessionRepository.save(newSession);
         return mapper.mapSessionToDto(savedSession);
@@ -54,14 +54,12 @@ public class SessionService {
 
         if (existingSession.isPresent()) {
             Session session = existingSession.get();
-            Campaign campaign = sessionDTO.campaign() == null ?
-                    null : campaignRepository.findById(sessionDTO.campaign().id()).orElse(null);
+            Campaign campaign = mapper.mapDtoToSession(sessionDTO).getCampaign();
+            Campaign existingCampaign = campaignRepository.findByTitle(campaign.getTitle()).orElse(campaignRepository.save(campaign));
 
             session.setSessionDate(sessionDTO.sessionDate());
             session.setNotes(sessionDTO.notes());
-            if (campaign != null) {
-                session.setCampaign(campaign);
-            }
+            session.setCampaign(existingCampaign);
 
             sessionRepository.save(session);
             return Optional.of(mapper.mapSessionToDto(session));
