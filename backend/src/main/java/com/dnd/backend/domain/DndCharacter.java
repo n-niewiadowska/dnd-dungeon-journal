@@ -28,7 +28,7 @@ public class DndCharacter {
     private int age;
     private boolean canPerformMagic;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private MainSkill skill;
 
     public DndCharacter(

@@ -34,7 +34,7 @@ public class Campaign {
     private List<DndCharacter> characters = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "campaign", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Session> sessions = new ArrayList<>();
 
     public Campaign(String title, String description, LocalDate beginningDate, GameStatus status) {

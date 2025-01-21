@@ -38,7 +38,8 @@ public class SessionService {
 
     public SessionDTO createSession(SessionDTO sessionDTO) {
         Campaign campaign = mapper.mapDtoToSession(sessionDTO).getCampaign();
-        Campaign existingCampaign = campaignRepository.findByTitle(campaign.getTitle()).orElse(campaignRepository.save(campaign));
+        Campaign existingCampaign = campaign != null ?
+                campaignRepository.findByTitle(campaign.getTitle()).orElse(null) : null;
 
         Session newSession = Session.builder()
                 .sessionDate(sessionDTO.sessionDate())
@@ -55,11 +56,14 @@ public class SessionService {
         if (existingSession.isPresent()) {
             Session session = existingSession.get();
             Campaign campaign = mapper.mapDtoToSession(sessionDTO).getCampaign();
-            Campaign existingCampaign = campaignRepository.findByTitle(campaign.getTitle()).orElse(campaignRepository.save(campaign));
+            Campaign existingCampaign = campaign != null ?
+                    campaignRepository.findByTitle(campaign.getTitle()).orElse(null) : null;
 
             session.setSessionDate(sessionDTO.sessionDate());
             session.setNotes(sessionDTO.notes());
-            session.setCampaign(existingCampaign);
+            if (existingCampaign != null) {
+                session.setCampaign(existingCampaign);
+            }
 
             sessionRepository.save(session);
             return Optional.of(mapper.mapSessionToDto(session));

@@ -41,7 +41,8 @@ public class DndCharacterService {
 
     public DndCharacterDTO createCharacter(DndCharacterDTO dndCharacterDTO) {
         MainSkill skill = mapper.mapDtoToCharacter(dndCharacterDTO).getSkill();
-        MainSkill existingSkill = skillRepository.findByName(skill.getName()).orElse(skillRepository.save(skill));
+        MainSkill existingSkill = skill != null ?
+            skillRepository.findByName(skill.getName()).orElse(skillRepository.save(skill)) : null;
 
         DndCharacter newCharacter = DndCharacter.builder()
                 .firstName(dndCharacterDTO.firstName())
@@ -63,7 +64,8 @@ public class DndCharacterService {
         if (existingCharacter.isPresent()) {
             DndCharacter dndCharacter = existingCharacter.get();
             MainSkill skill = mapper.mapDtoToCharacter(dndCharacterDTO).getSkill();
-            MainSkill existingSkill = skillRepository.findByName(skill.getName()).orElse(skillRepository.save(skill));
+            MainSkill existingSkill = skill != null ?
+                    skillRepository.findByName(skill.getName()).orElse(skillRepository.save(skill)) : null;
 
             dndCharacter.setFirstName(dndCharacterDTO.firstName());
             dndCharacter.setLastName(dndCharacterDTO.lastName());
@@ -71,7 +73,9 @@ public class DndCharacterService {
             dndCharacter.setRace(dndCharacterDTO.race());
             dndCharacter.setAge(dndCharacterDTO.age());
             dndCharacter.setCanPerformMagic(dndCharacterDTO.canPerformMagic());
-            dndCharacter.setSkill(existingSkill);
+            if (existingSkill != null) {
+                dndCharacter.setSkill(existingSkill);
+            }
 
             dndCharacterRepository.save(dndCharacter);
             return Optional.of(mapper.mapCharacterToDto(dndCharacter));

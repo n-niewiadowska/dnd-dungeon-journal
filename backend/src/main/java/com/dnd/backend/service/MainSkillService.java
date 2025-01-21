@@ -39,7 +39,8 @@ public class MainSkillService {
 
     public MainSkillDTO createSkill(MainSkillDTO mainSkillDTO) {
         MainItem item = mapper.mapDtoToSkill(mainSkillDTO).getAssociatedItem();
-        MainItem existingItem = itemRepository.findByName(item.getName()).orElse(itemRepository.save(item));
+        MainItem existingItem = item != null ?
+                itemRepository.findByName(item.getName()).orElse(itemRepository.save(item)) : null;
 
         MainSkill newSkill = MainSkill.builder()
                 .name(mainSkillDTO.name())
@@ -60,14 +61,17 @@ public class MainSkillService {
         if (existingSkill.isPresent()) {
             MainSkill skill = existingSkill.get();
             MainItem item = mapper.mapDtoToSkill(mainSkillDTO).getAssociatedItem();
-            MainItem existingItem = itemRepository.findByName(item.getName()).orElse(itemRepository.save(item));
+            MainItem existingItem = item != null ?
+                    itemRepository.findByName(item.getName()).orElse(itemRepository.save(item)) : null;
 
             skill.setName(mainSkillDTO.name());
             skill.setRelatedAbility(mainSkillDTO.relatedAbility());
             skill.setDescription(mainSkillDTO.description());
             skill.setLevel(mainSkillDTO.level());
             skill.setEffect(mainSkillDTO.effect());
-            skill.setAssociatedItem(existingItem);
+            if (existingItem != null) {
+                skill.setAssociatedItem(existingItem);
+            }
 
             skillRepository.save(skill);
             return Optional.of(mapper.mapSkillToDto(skill));
