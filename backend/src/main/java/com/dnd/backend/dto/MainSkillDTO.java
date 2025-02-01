@@ -1,6 +1,7 @@
 package com.dnd.backend.dto;
 
 import com.dnd.backend.constant.Ability;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import org.hibernate.validator.constraints.Length;
@@ -15,5 +16,5 @@ public record MainSkillDTO(
         String description,
         int level,
         String effect,
-        MainItemDTO associatedItem
+        @JsonIgnore MainItemDTO associatedItem
 ) {}

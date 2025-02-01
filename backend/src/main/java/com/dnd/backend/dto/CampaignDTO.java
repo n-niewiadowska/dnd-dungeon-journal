@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.dnd.backend.constant.GameStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -18,5 +19,5 @@ public record CampaignDTO(
     String description,
     @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate beginningDate,
     GameStatus status,
-    List<DndCharacterDTO> characters
+    @JsonIgnore List<DndCharacterDTO> characters
 ) {}
