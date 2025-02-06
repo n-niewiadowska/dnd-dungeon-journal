@@ -1,0 +1,33 @@
+<div class="header">
+  <div class="logo" tabindex="0" (keydown.enter)="goToHome()" (click)="goToHome()">
+    <img src="/dnd-logo.png" alt="logo" />
+    <h1>{{ "header.title" | translate }}</h1>
+  </div>
+  <div class="menu">
+    <p-button
+      label="{{ 'header.campaign' | translate }}"
+      variant="outlined"
+      (onClick)="goToCampaigns()"
+    />
+    <p-button
+      label="{{ 'header.character' | translate }}"
+      variant="outlined"
+      (onClick)="goToCharacters()"
+    />
+    <p-button
+      label="{{ 'header.skill' | translate }}"
+      variant="outlined"
+      (onClick)="goToSkills()"
+    />
+    <div class="mode-switch">
+      <span class="switch-label">{{ "header.theme" | translate }}</span>
+      <p-toggleswitch (onChange)="toggleTheme()" />
+    </div>
+    <div class="lang">
+      <p-selectbutton
+        [options]="langOptions"
+        (onOptionClick)="changeLanguage($event.option.value)"
+      />
+    </div>
+  </div>
+</div>

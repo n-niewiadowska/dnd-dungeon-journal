@@ -1,0 +1,163 @@
+<div class="content">
+  <div class="buttons">
+    <p-button
+      label="{{ 'common.new' | translate }}"
+      icon="pi pi-plus"
+      styleClass="p-button-edit"
+      (onClick)="createCampaign()"
+    />
+    <p-button
+      label="{{ 'common.back' | translate }}"
+      icon="pi pi-replay"
+      styleClass="p-button-back"
+      (onClick)="goBack()"
+    />
+  </div>
+  <div class="page-content">
+    <div class="manager">
+      <form class="filters" (submit)="$event.preventDefault()">
+        <div class="search">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-search"></p-inputicon>
+            <input
+              type="text"
+              placeholder="{{ 'filters.campaign.search' | translate }}"
+              #searchInput
+              (keydown.enter)="applyTextFilter(searchInput.value)"
+            />
+          </p-iconfield>
+          <p-button
+            label="{{ 'common.search' | translate }}"
+            severity="secondary"
+            (click)="applyTextFilter(searchInput.value)"
+          ></p-button>
+        </div>
+        <div class="checkboxes">
+          <h3>{{ "common.filter" | translate }}</h3>
+          <h4>{{ "filters.campaign.status" | translate }}</h4>
+          @for (status of statuses; track $index) {
+          <label>
+            <input
+              type="checkbox"
+              [value]="status"
+              (change)="applyStatusFilter(status, $any($event.target)?.checked)"
+            />
+            {{ "game-status." + status | translate }}
+          </label>
+          }
+        </div>
+        <div class="radio-buttons">
+          <h4>{{ "filters.campaign.date.label" | translate }}</h4>
+          <label>
+            <input
+              type="radio"
+              name="dateFilter"
+              value="past"
+              (change)="applyDateFilter('past')"
+            />
+            {{ "filters.campaign.date.option-1" | translate }}
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="dateFilter"
+              value="future"
+              (change)="applyDateFilter('future')"
+            />
+            {{ "filters.campaign.date.option-2" | translate }}
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="dateFilter"
+              value=""
+              (change)="applyDateFilter(null)"
+            />
+            {{ "filters.campaign.date.option-3" | translate }}
+          </label>
+        </div>
+
+        <div>
+          <p-button
+            label="{{ 'common.clear' | translate }}"
+            severity="secondary"
+            size="small"
+            (onClick)="clearFilters()"
+          />
+        </div>
+
+        <div>
+          <h4>{{ "common.sort" | translate }}</h4>
+          <select (change)="applySort($any($event.target)?.value)">
+            <option value="title-asc">
+              {{ "sort.campaign.title-asc" | translate }}
+            </option>
+            <option value="title-desc">
+              {{ "sort.campaign.title-desc" | translate }}
+            </option>
+            <option value="date-asc">
+              {{ "sort.campaign.date-asc" | translate }}
+            </option>
+            <option value="date-desc">
+              {{ "sort.campaign.date-desc" | translate }}
+            </option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="list">
+      <h2>{{ "details.campaign.header" | translate }}</h2>
+      @for (campaign of campaigns$ | async; track campaign.id) {
+      <div class="element">
+        <div class="info">
+          <h3>{{ campaign.title }}</h3>
+          <p>
+            {{ "game-status." + campaign.status | translate }} | start:
+            {{ campaign.beginningDate }}
+          </p>
+        </div>
+        @if (campaign.id) {
+        <p-button
+          label="{{ 'common.details' | translate }}"
+          severity="secondary"
+          (click)="goToDetails(campaign.id)"
+        />
+        }
+      </div>
+      }
+      <div class="pagination">
+        <p-button
+          label="{{ 'common.page.prev' | translate }}"
+          variant="text"
+          icon="pi pi-chevron-left"
+          (click)="changePage(currPage - 1)"
+          [disabled]="currPage === 1"
+        />
+        <span
+          [translate]="'common.page.info'"
+          [translateParams]="{ curr: currPage, total: totalPages }"
+        ></span>
+        <p-button
+          label="{{ 'common.page.next' | translate }}"
+          variant="text"
+          icon="pi pi-chevron-right"
+          (click)="changePage(currPage + 1)"
+          [disabled]="currPage === totalPages"
+        />
+      </div>
+      <div class="page-size">
+        <label for="pageSize">{{ "common.page.number" | translate }}: </label>
+        <select
+          id="pageSize"
+          (change)="changePageSize($any($event.target).value)"
+        >
+          <option [value]="1">1</option>
+          <option [value]="2" selected>2</option>
+          <option [value]="4">4</option>
+          <option [value]="6">6</option>
+          <option [value]="8">8</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

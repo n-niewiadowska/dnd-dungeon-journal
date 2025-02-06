@@ -1,0 +1,163 @@
+<div class="content">
+  <div class="buttons">
+    <p-button
+      label="{{ 'common.back' | translate }}"
+      icon="pi pi-replay"
+      styleClass="p-button-back"
+      (onClick)="goBack()"
+    />
+  </div>
+  <div class="page-content">
+    <div class="manager">
+      <form class="filters" (submit)="$event.preventDefault()">
+        <div class="search">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-search"></p-inputicon>
+            <input
+              type="text"
+              placeholder="{{ 'filters.skill.search' | translate }}"
+              #searchInput
+              (keydown.enter)="applyTextFilter(searchInput.value)"
+            />
+          </p-iconfield>
+          <p-button
+            label="{{ 'common.search' | translate }}"
+            severity="secondary"
+            (click)="applyTextFilter(searchInput.value)"
+          ></p-button>
+        </div>
+        <h3>{{ "common.filter" | translate }}</h3>
+        <div>
+          <h4>{{ "filters.skill.ability" | translate }}</h4>
+          <select
+            id="abilityFilter"
+            (change)="applyAbilityFilter($any($event.target)?.value)"
+          >
+            <option value="">
+              {{ "filters.skill.ability-all" | translate }}
+            </option>
+            @for (ability of abilities; track $index) {
+            <option [value]="ability">
+              {{ "ability." + ability | translate }}
+            </option>
+            }
+          </select>
+        </div>
+        <div class="radio-buttons">
+          <h4>{{ "filters.skill.level.label" | translate }}</h4>
+          <label>
+            <input
+              type="radio"
+              name="levelFilter"
+              (change)="applyLevelFilter({ min: 1, max: 5 })"
+            />
+            {{ "filters.skill.level.option-1" | translate }}
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="levelFilter"
+              (change)="applyLevelFilter({ min: 5, max: 15 })"
+            />
+            {{ "filters.skill.level.option-2" | translate }}
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="levelFilter"
+              (change)="applyLevelFilter({ min: 15, max: 25 })"
+            />
+            {{ "filters.skill.level.option-3" | translate }}
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="levelFilter"
+              value=""
+              (change)="applyLevelFilter(null)"
+            />
+            {{ "filters.skill.level.option-4" | translate }}
+          </label>
+        </div>
+
+        <div>
+          <p-button
+            label="{{ 'common.clear' | translate }}"
+            severity="secondary"
+            size="small"
+            (onClick)="clearFilters()"
+          />
+        </div>
+
+        <div>
+          <h4>{{ "common.sort" | translate }}</h4>
+          <select (change)="applySort($any($event.target)?.value)">
+            <option value="name-asc">
+              {{ "sort.skill.name-asc" | translate }}
+            </option>
+            <option value="name-desc">
+              {{ "sort.skill.name-desc" | translate }}
+            </option>
+            <option value="level-asc">
+              {{ "sort.skill.level-asc" | translate }}
+            </option>
+            <option value="level-desc">
+              {{ "sort.skill.level-desc" | translate }}
+            </option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="list">
+      <h2>{{ "details.skill.header" | translate }}</h2>
+      @for (skill of skills$ | async; track skill.id) {
+      <div class="element">
+        <div class="info">
+          <h3>{{ skill.name }}</h3>
+          <p>{{ "details.skill.level" | translate }}: {{ skill.level }}</p>
+        </div>
+        @if (skill.id) {
+        <p-button
+          label="{{ 'common.details' | translate }}"
+          severity="secondary"
+          (click)="goToDetails(skill.id)"
+        />
+        }
+      </div>
+      }
+      <div class="pagination">
+        <p-button
+          label="{{ 'common.page.prev' | translate }}"
+          variant="text"
+          icon="pi pi-chevron-left"
+          (click)="changePage(currPage - 1)"
+          [disabled]="currPage === 1"
+        />
+        <span
+          [translate]="'common.page.info'"
+          [translateParams]="{ curr: currPage, total: totalPages }"
+        ></span>
+        <p-button
+          label="{{ 'common.page.next' | translate }}"
+          variant="text"
+          icon="pi pi-chevron-right"
+          (click)="changePage(currPage + 1)"
+          [disabled]="currPage === totalPages"
+        />
+      </div>
+      <div class="page-size">
+        <label for="pageSize">{{ "common.page.number" | translate }}: </label>
+        <select
+          id="pageSize"
+          (change)="changePageSize($any($event.target).value)"
+        >
+          <option [value]="1">1</option>
+          <option [value]="2" selected>2</option>
+          <option [value]="4">4</option>
+          <option [value]="6">6</option>
+          <option [value]="8">8</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,159 @@
+<div class="content">
+  <div class="buttons">
+    <p-button
+      label="{{ 'common.new' | translate }}"
+      icon="pi pi-plus"
+      styleClass="p-button-edit"
+      (onClick)="createCharacter()"
+    />
+    <p-button
+      label="{{ 'common.back' | translate }}"
+      icon="pi pi-replay"
+      styleClass="p-button-back"
+      (onClick)="goBack()"
+    />
+  </div>
+  <div class="page-content">
+    <div class="manager">
+      <form class="filters" (submit)="$event.preventDefault()">
+        <h3>{{ "common.filter" | translate }}</h3>
+        <div class="race-select">
+          <h4>{{ "filters.character.race" | translate }}</h4>
+          <select (change)="applyRaceFilter($any($event.target)?.value)">
+            <option value="">
+              {{ "filters.character.race-all" | translate }}
+            </option>
+            @for (race of races; track $index) {
+            <option [value]="race">{{ "race." + race | translate }}</option>
+            }
+          </select>
+        </div>
+        <div class="checkboxes">
+          <h4>{{ "filters.character.class" | translate }}</h4>
+          <div>
+            @for (dndClass of dndClasses; track $index) {
+            <label>
+              <input
+                type="checkbox"
+                [value]="dndClass"
+                (change)="
+                  applyClassFilter(dndClass, $any($event.target)?.checked)
+                "
+              />
+              {{ "dnd-class." + dndClass | translate }}
+            </label>
+            }
+          </div>
+        </div>
+        <div class="radio-buttons">
+          <h4>{{ "filters.character.ability.label" | translate }}</h4>
+          <label>
+            <input
+              type="radio"
+              name="magicFilter"
+              (change)="applyMagicFilter(true)"
+            />
+            {{ "filters.character.ability.option-1" | translate }}
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="magicFilter"
+              (change)="applyMagicFilter(false)"
+            />
+            {{ "filters.character.ability.option-2" | translate }}
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="magicFilter"
+              (change)="applyMagicFilter(null)"
+            />
+            {{ "filters.character.ability.option-3" | translate }}
+          </label>
+        </div>
+
+        <div>
+          <p-button
+            label="{{ 'common.clear' | translate }}"
+            severity="secondary"
+            size="small"
+            (onClick)="clearFilters()"
+          />
+        </div>
+
+        <div>
+          <h4>{{ "common.sort" | translate }}</h4>
+          <select (change)="applySort($any($event.target)?.value)">
+            <option value="firstname-asc">
+              {{ "sort.character.firstname-asc" | translate }}
+            </option>
+            <option value="firstname-desc">
+              {{ "sort.character.firstname-desc" | translate }}
+            </option>
+            <option value="age-asc">
+              {{ "sort.character.age-asc" | translate }}
+            </option>
+            <option value="age-desc">
+              {{ "sort.character.age-desc" | translate }}
+            </option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="list">
+      <h2>{{ "details.character.header" | translate }}</h2>
+      @for (character of characters$ | async; track character.id) {
+      <div class="element">
+        <div class="info">
+          <h3>{{ character.firstName }} {{ character.lastName }}</h3>
+          <p>
+            {{ "race." + character.race | translate }} |
+            {{ "dnd-class." + character.dndClass | translate }}
+          </p>
+        </div>
+        @if (character.id) {
+        <p-button
+          label="{{ 'common.details' | translate }}"
+          severity="secondary"
+          (click)="goToDetails(character.id)"
+        />
+        }
+      </div>
+      }
+      <div class="pagination">
+        <p-button
+          label="{{ 'common.page.prev' | translate }}"
+          variant="text"
+          icon="pi pi-chevron-left"
+          (click)="changePage(currPage - 1)"
+          [disabled]="currPage === 1"
+        />
+        <span
+          [translate]="'common.page.info'"
+          [translateParams]="{ curr: currPage, total: totalPages }"
+        ></span>
+        <p-button
+          label="{{ 'common.page.next' | translate }}"
+          variant="text"
+          icon="pi pi-chevron-right"
+          (click)="changePage(currPage + 1)"
+          [disabled]="currPage === totalPages"
+        />
+      </div>
+      <div class="page-size">
+        <label for="pageSize">{{ "common.page.number" | translate }}: </label>
+        <select
+          id="pageSize"
+          (change)="changePageSize($any($event.target).value)"
+        >
+          <option [value]="1">1</option>
+          <option [value]="2" selected>2</option>
+          <option [value]="4">4</option>
+          <option [value]="6">6</option>
+          <option [value]="8">8</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

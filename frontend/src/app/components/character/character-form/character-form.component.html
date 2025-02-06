@@ -1,0 +1,145 @@
+<div class="content">
+  <h2>
+    {{
+      isEdit
+        ? ("form.character.edit" | translate)
+        : ("form.character.create" | translate)
+    }}
+  </h2>
+
+  <form [formGroup]="characterForm" (ngSubmit)="showDialog()">
+    <div>
+      <label for="firstName"
+        >{{ "form.character.firstname" | translate }}:
+      </label>
+      <div class="input">
+        <input type="text" pInputText formControlName="firstName" />
+        <app-validation-message [control]="characterForm.controls.firstName" />
+      </div>
+      <label for="lastName"
+        >{{ "form.character.lastname" | translate }}:
+      </label>
+      <div class="input">
+        <input type="text" pInputText formControlName="lastName" />
+        <app-validation-message [control]="characterForm.controls.lastName" />
+      </div>
+    </div>
+
+    <div>
+      <label for="dndClass">{{ "form.character.class" | translate }}:</label>
+      <select id="dndClass" formControlName="dndClass">
+        @for(dndClass of dndClasses; track $index) {
+        <option [value]="dndClass">
+          {{ "dnd-class." + dndClass | translate }}
+        </option>
+        }
+      </select>
+      <label for="race">{{ "form.character.race" | translate }}:</label>
+      <select id="race" formControlName="race">
+        @for(race of races; track $index) {
+        <option [value]="race">{{ "race." + race | translate }}</option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <label for="age">{{ "form.character.age" | translate }}: </label>
+      <div class="input">
+        <p-inputnumber [showButtons]="true" formControlName="age" />
+        <app-validation-message [control]="characterForm.controls.age" />
+      </div>
+    </div>
+
+    <div>
+      <label for="canPerformMagic">{{
+        "form.character.magical" | translate
+      }}</label>
+      <div>
+        <label for="canPerformMagic">
+          <p-radiobutton [value]="true" formControlName="canPerformMagic" />
+          {{ "form.character.magical-yes" | translate }}
+        </label>
+        <label for="canPerformMagic">
+          <p-radiobutton [value]="false" formControlName="canPerformMagic" />
+          {{ "form.character.magical-no" | translate }}
+        </label>
+      </div>
+    </div>
+
+    <div class="skill" [formGroup]="skillForm">
+      <h3>{{ "form.skill.header" | translate }}</h3>
+
+      <div>
+        <label for="name">{{ "form.skill.name" | translate }}: </label>
+        <div class="input">
+          <input type="text" pInputText formControlName="name" />
+          <app-validation-message [control]="skillForm.controls.name" />
+        </div>
+        <label for="relatedAbility"
+          >{{ "form.skill.ability" | translate }}:</label
+        >
+        <select id="relatedAbility" formControlName="relatedAbility">
+          @for(ability of abilities; track $index) {
+          <option [value]="ability">
+            {{ "ability." + ability | translate }}
+          </option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="description"
+          >{{ "form.skill.description" | translate }}:
+        </label>
+        <textarea pTextarea cols="40" formControlName="description"></textarea>
+      </div>
+
+      <div>
+        <label for="level">{{ "form.skill.level" | translate }}: </label>
+        <p-inputnumber [showButtons]="true" formControlName="level" />
+        <app-validation-message [control]="skillForm.controls.level" />
+        <label for="effect">{{ "form.skill.effect" | translate }}: </label>
+        <input type="text" pInputText formControlName="effect" />
+      </div>
+    </div>
+
+    <div class="buttons">
+      <p-button
+        type="submit"
+        [disabled]="characterForm.invalid"
+        label="{{
+          isEdit ? ('form.edit' | translate) : ('form.create' | translate)
+        }}"
+        styleClass="p-button-edit"
+      />
+      <p-button
+        label="{{ 'common.back' | translate }}"
+        styleClass="p-button-back"
+        (click)="goBack()"
+      />
+    </div>
+  </form>
+
+  <p-dialog
+    header="{{ 'modal.character.edit-header' | translate }}"
+    [modal]="true"
+    [visible]="visible"
+    [style]="{ width: '25rem' }"
+  >
+    <span class="p-text-secondary block mb-8">{{
+      "modal.character.edit-text" | translate
+    }}</span>
+    <div class="flex justify-end gap-2">
+      <p-button
+        label="{{ 'modal.cancel' | translate }}"
+        styleClass="p-button-cancel"
+        (click)="visible = false"
+      />
+      <p-button
+        label="{{ 'modal.save' | translate }}"
+        styleClass="p-button-save"
+        (click)="saveCharacter()"
+      />
+    </div>
+  </p-dialog>
+</div>

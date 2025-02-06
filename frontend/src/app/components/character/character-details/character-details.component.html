@@ -1,0 +1,84 @@
+<div class="content">
+  <img
+    src="pictures/character-detail-picture.png"
+    alt="DnD character picture"
+  />
+  <div class="details">
+    @if (character) {
+    <h1>{{ character.firstName }} {{ character.lastName }}</h1>
+    <ul>
+      <li>
+        {{ "details.character.race" | translate }}:
+        {{ "race." + character.race | translate }}
+      </li>
+      <li>
+        {{ "details.character.class" | translate }}:
+        {{ "dnd-class." + character.dndClass | translate }}
+      </li>
+      <li
+        [translate]="'details.character.age'"
+        [translateParams]="{ age: character.age }"
+      ></li>
+      <li>
+        {{
+          character.canPerformMagic
+            ? ("details.character.magical" | translate)
+            : ("details.character.not-magical" | translate)
+        }}
+      </li>
+    </ul>
+    <div class="skill">
+      <h2>{{ "details.character.skill" | translate }}</h2>
+      @if (character.skill) {
+      <p>
+        <i>{{ character.skill.name }}</i> - {{ character.skill.description }}
+      </p>
+      }
+    </div>
+    <div class="buttons">
+      @if (character.id) {
+      <p-button
+        label="{{ 'common.edit' | translate }}"
+        icon="pi pi-pencil"
+        styleClass="p-button-edit"
+        (onClick)="editCharacter(character.id)"
+      />
+      }
+      <p-button
+        (click)="showDialog()"
+        label="{{ 'common.delete' | translate }}"
+        icon="pi pi-trash"
+        severity="danger"
+      />
+      <p-button
+        label="{{ 'common.back' | translate }}"
+        icon="pi pi-replay"
+        styleClass="p-button-back"
+        (onClick)="goBack()"
+      />
+    </div>
+    }
+  </div>
+  <p-dialog
+    header="{{ 'modal.character.delete-header' | translate }}"
+    [modal]="true"
+    [visible]="visible"
+    [style]="{ width: '25rem' }"
+  >
+    <span class="p-text-secondary block mb-8">{{
+      "modal.character.delete-text" | translate
+    }}</span>
+    <div class="flex justify-end gap-2">
+      <p-button
+        label="{{ 'modal.cancel' | translate }}"
+        styleClass="p-button-cancel"
+        (click)="visible = false"
+      />
+      <p-button
+        label="{{ 'modal.delete' | translate }}"
+        severity="danger"
+        (click)="deleteCharacter()"
+      />
+    </div>
+  </p-dialog>
+</div>

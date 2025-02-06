@@ -1,0 +1,25 @@
+<div class="content">
+    <div class="text">
+        <h1>{{ 'home.header' | translate }}</h1>
+        <p>{{ 'home.content-1' | translate }}</p>
+        <p>{{ 'home.content-2' | translate }}</p>
+        <p>{{ 'home.content-3' | translate }}</p>
+    </div>
+    <div class="slides">
+        <p-galleria 
+            [showIndicators]="true"  
+            [showThumbnails]="false"
+            [showItemNavigators]="true"
+            [autoPlay]="true" [circular]="true"
+            [value]="images"
+            > 
+            <ng-template pTemplate="item" let-item> 
+                <img 
+                    [src]="item.previewImageSrc"  
+                    [alt]="item.alt" 
+                    style="width: 800px; height: 470px;" 
+                /> 
+            </ng-template> 
+        </p-galleria> 
+    </div>
+</div>

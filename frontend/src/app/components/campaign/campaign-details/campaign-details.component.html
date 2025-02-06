@@ -1,0 +1,58 @@
+<div class="content">
+  <img src="pictures/campaign-detail-picture.png" alt="DnD character picture" />
+  <div class="details">
+    @if (campaign) {
+    <h1>{{ campaign.title }}</h1>
+    <p class="status">
+      Status: <b>{{ "game-status." + campaign.status | translate }}</b
+      >, {{ "details.campaign.start" | translate }}:
+      {{ campaign.beginningDate }}
+    </p>
+    <p class="description">{{ campaign.description }}</p>
+    <div class="buttons">
+      @if (campaign.id) {
+      <p-button
+        label="{{ 'common.edit' | translate }}"
+        icon="pi pi-pencil"
+        styleClass="p-button-edit"
+        (onClick)="editCampaign(campaign.id)"
+      />
+      }
+      <p-button
+        (click)="showDialog()"
+        label="{{ 'common.delete' | translate }}"
+        icon="pi pi-trash"
+        severity="danger"
+      />
+      <p-button
+        label="{{ 'common.back' | translate }}"
+        icon="pi pi-replay"
+        styleClass="p-button-back"
+        (onClick)="goBack()"
+      />
+    </div>
+    }
+  </div>
+  <p-dialog
+    header="{{ 'modal.campaign.delete-header' | translate }}"
+    [modal]="true"
+    [visible]="visible"
+    [style]="{ width: '25rem' }"
+  >
+    <span class="p-text-secondary block mb-8">{{
+      "modal.campaign.delete-text" | translate
+    }}</span>
+    <div class="flex justify-end gap-2">
+      <p-button
+        label="{{ 'modal.cancel' | translate }}"
+        styleClass="p-button-cancel"
+        (click)="visible = false"
+      />
+      <p-button
+        label="{{ 'modal.delete' | translate }}"
+        severity="danger"
+        (click)="deleteCampaign()"
+      />
+    </div>
+  </p-dialog>
+</div>

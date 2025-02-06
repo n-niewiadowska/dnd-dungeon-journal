@@ -1,0 +1,27 @@
+<div class="content">
+  <img src="pictures/skill-detail-picture.png" alt="DnD treasure picture" />
+  <div class="details">
+    @if (skill) {
+    <h1>{{ skill.name }}</h1>
+    <p>{{ skill.description }}</p>
+    <ul>
+      <li
+        [translate]="'details.skill.ability'"
+        [translateParams]="{
+          ability: 'ability.' + skill.relatedAbility | translate
+        }"
+      ></li>
+      <li>{{ "details.skill.level" | translate }}: {{ skill.level }}</li>
+      <li>{{ "details.skill.effect" | translate }}: {{ skill.effect }}</li>
+    </ul>
+    <div class="buttons">
+      <p-button
+        label="{{ 'common.back' | translate }}"
+        icon="pi pi-replay"
+        styleClass="p-button-back"
+        (onClick)="goBack()"
+      />
+    </div>
+    }
+  </div>
+</div>

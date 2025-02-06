@@ -1,0 +1,46 @@
+.header {
+    width: 100%;
+    padding: 0.5rem 1.5rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+
+        cursor: pointer;
+
+        img {
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+    .menu {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .mode-switch {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            .switch-label {
+                font-size: 0.7rem;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+}

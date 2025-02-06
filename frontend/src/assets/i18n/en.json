@@ -1,0 +1,230 @@
+{
+    "header": {
+        "title": "Dungeon Journal",
+        "campaign": "Manage campaigns",
+        "character": "Manage characters",
+        "skill": "Browse skills",
+        "theme": "Change theme"
+    },
+    "footer": {
+        "info": "<i>Dungeons and Dragons</i> is a role-playing game with interactive storytelling where players gather together and take part in an imaginary adventure.",
+        "source-head": "Important sources:",
+        "source": "Dnd Official Website"
+    },
+    "home": {
+        "header": "Organize your adventures like never before!",
+        "content-1": "Create. Manage. Play.",
+        "content-2": "Dungeon Journal brings your RPG campaigns to life by organizing your ideas, characters, and schedules effortlessly.",
+        "content-3": "Everything you need for your journeys is in one place!"
+    },
+    "not-found": {
+        "status": "Page not found",
+        "back": "Go back to home"
+    },
+    "validation": {
+        "required": "This field is required.",
+        "minlength": "This value is too short.",
+        "maxlength": "This value is too long.",
+        "min": "This value is too small."
+    },
+    "modal": {
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "save": "Save",
+        "campaign": {
+            "delete-header": "Delete campaign",
+            "edit-header": "Edit campaign",
+            "delete-text": "Are you sure you want to delete this campaign?",
+            "edit-text": "Are you sure you want to edit this campaign?"
+        },
+        "character": {
+            "delete-header": "Delete character",
+            "edit-header": "Edit character",
+            "delete-text": "Are you sure you want to delete this character?",
+            "edit-text": "Are you sure you want to edit this character?"
+        }
+    },
+    "common": {
+        "details": "Show details",
+        "new":"Create new",
+        "edit": "Edit",
+        "delete": "Delete",
+        "back":"Go back",
+        "clear": "Clear filters",
+        "filter": "Filter by",
+        "sort": "Sort By",
+        "search": "Search",
+        "page": {
+            "prev": "Previous",
+            "next": "Next",
+            "info": "Page {{ curr }} from {{ total }}",
+            "number": "Number of elements on the page"
+        }
+    },
+    "form": {
+        "edit": "Edit",
+        "create": "Create",
+        "campaign": {
+            "edit": "Edit campaign",
+            "create": "Create campaign",
+            "title": "Title",
+            "description": "Description",
+            "date": "Beginning date"
+        },
+        "character": {
+            "edit": "Edit character",
+            "create": "Create character",
+            "firstname": "First name",
+            "lastname": "Last name",
+            "age": "Age",
+            "race": "Race",
+            "class": "Class",
+            "magical": "Does the character have magical abilities?",
+            "magical-yes": "Yes",
+            "magical-no": "No"
+        },
+        "skill": {
+            "header": "Skill",
+            "name": "Name",
+            "description": "Description",
+            "ability": "Related ability",
+            "level": "Level",
+            "effect": "Effect"
+        }
+    },
+    "details": {
+        "campaign": {
+            "header": "Campaigns",
+            "start": "starts on"
+        },
+        "character": {
+            "header": "Characters",
+            "race": "Race",
+            "class": "Class",
+            "age": "{{ age }} years old.",
+            "magical": "Has magical abilities.",
+            "not-magical": "Doesn't have magical abilities.",
+            "skill": "Main skill"
+        },
+        "skill": {
+            "header": "Skill",
+            "ability": "Extends the ability: {{ ability }}.",
+            "level": "Level",
+            "effect": "Effect"
+        }
+    },
+    "filters": {
+        "campaign": {
+            "search": "Search by title",
+            "status": "Status",
+            "date": {
+                "label": "Beginning date",
+                "option-1": "In the past",
+                "option-2": "Now or in the future",
+                "option-3": "All"
+            }
+        },
+        "character": {
+            "race": "Race",
+            "race-all": "All races",
+            "class": "Class",
+            "ability": {
+                "label": "Magical abilities",
+                "option-1": "Yes",
+                "option-2": "No",
+                "option-3": "All"
+            }
+        },
+        "skill": {
+            "search": "Search by name",
+            "ability": "Ability",
+            "ability-all": "All abilities",
+            "level": {
+                "label": "Level",
+                "option-1": "Between 1-5",
+                "option-2": "Between 5-15",
+                "option-3": "Above 15",
+                "option-4": "All"
+            }
+
+        }
+    },
+    "sort": {
+        "campaign": {
+            "title-asc": "Title (A-Z)",
+            "title-desc": "Title (Z-A)",
+            "date-asc": "Date (from oldest)",
+            "date-desc": "Date (from newest)"
+        },
+        "character": {
+            "firstname-asc": "First name (A-Z)",
+            "firstname-desc": "First name (Z-A)",
+            "age-asc": "Age (from youngest)",
+            "age-desc": "Age (from oldest)"
+        },
+        "skill": {
+            "name-asc": "Name (A-Z)",
+            "name-desc": "Name (Z-A)",
+            "level-asc": "Level (from lowest)",
+            "level-desc": "Level (from highest)"
+        }
+    },
+    "toast": {
+        "summary": {
+            "delete-success": "Delete",
+            "edit-success": "Edit",
+            "create-success": "Create",
+            "error": "Error"
+        },
+        "campaign": {
+            "delete-success": "Campaign '{{ title }}' has been deleted successfully.",
+            "edit-success": "Campaign has been updated successfully.",
+            "create-success": "Campaign has been created successfully.",
+            "delete-error": "There was an issue while deleting this campaign.",
+            "edit-error": "There was an issue while updating this campaign.",
+            "create-error": "There was an issue while creating this campaign."
+        },
+        "character": {
+            "delete-success": "{{ firstName }} {{ lastName }} has been deleted successfully.",
+            "edit-success": "Character has been updated successfully.",
+            "create-success": "Character has been created successfully.",
+            "delete-error": "There was an issue while deleting this character.",
+            "edit-error": "There was an issue while updating this character.",
+            "create-error": "There was an issue while creating this character."
+        }
+    },
+    "game-status": {
+        "PLANNED": "Planned",
+        "IN_PROGRESS": "In progress",
+        "FINISHED": "Finished"
+    },
+    "dnd-class": {
+        "BARBARIAN": "Barbarian",
+        "BARD": "Bard",
+        "DRUID": "Druid",
+        "FIGHTER": "Fighter",
+        "MONK": "Monk",
+        "PALADIN": "Paladin",
+        "ROGUE": "Rogue",
+        "SORCERER": "Sorcerer",
+        "WARLOCK": "Warlock",
+        "WIZARD": "Wizard"
+    },
+    "race": {
+        "DRAGONBORN": "Dragonborn",
+        "DWARF": "Dwarf",
+        "ELF": "Elf",
+        "GNOME": "Gnome",
+        "HALFLING": "Halfling",
+        "HUMAN": "Human",
+        "ORC": "Orc",
+        "TIEFLING": "Tiefling"
+    },
+    "ability": {
+        "CHARISMA": "Charisma",
+        "DEXTERITY": "Dexterity",
+        "INTELLIGENCE": "Intelligence",
+        "STRENGTH": "Strength",
+        "WISDOM": "Wisdom"
+    }
+}

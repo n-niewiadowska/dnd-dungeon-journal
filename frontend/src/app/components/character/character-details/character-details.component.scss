@@ -1,0 +1,43 @@
+@import 'themes';
+
+.content {
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6rem;
+
+    img {
+        width: 300px;
+        height: 500px;
+        border: 2px solid var(--btn-main-color);
+    }
+
+    .details {
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0;
+        }
+
+        ul {
+            list-style-type: square;
+            padding-left: 1rem;
+            font-size: 1.2rem;
+        }
+
+        p > i {
+            font-size: 1.2rem;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            padding-top: 2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        flex-direction: column-reverse;
+    }
+}

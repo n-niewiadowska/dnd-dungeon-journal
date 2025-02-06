@@ -1,0 +1,27 @@
+@import 'variables';
+
+[data-theme="light"] {
+    --main-bg-color: #{ $antiquewhite-lighter };
+    --footer-bg-color: #{ $antiquewhite-darker }; 
+    --filter-bg-color: antiquewhite;
+
+    --text-color: black;
+    --link-color: #{ $brown-1 };
+
+    --btn-main-color: #{ $dark-brown-2 };
+    --btn-hover-color: #{ $dark-opacity-1 };
+    --btn-active-color: #{ $dark-opacity-2 };
+}
+
+[data-theme="dark"] {
+    --main-bg-color: #{ $dark-brown-3 };
+    --footer-bg-color: #{ $dark-brown-1 };
+    --filter-bg-color: #{ $light-brown-2 };
+
+    --text-color: white;
+    --link-color: #{ $light-brown-1 };
+
+    --btn-main-color: #{ $white-1 };
+    --btn-hover-color: #{ $light-opacity-1 };
+    --btn-active-color: #{ $light-opacity-2 };
+}

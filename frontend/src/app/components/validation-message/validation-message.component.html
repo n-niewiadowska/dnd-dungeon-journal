@@ -1,0 +1,16 @@
+<p>
+    @if (control && control.touched) {
+        @if (control.errors?.['required']) {
+            {{ 'validation.required' | translate }}
+        }
+        @if (control.errors?.['minlength']) {
+            {{ 'validation.minlength' | translate }}
+        }
+        @if (control.errors?.['maxlength']) {
+            {{ 'validation.maxlength' | translate }}
+        }
+        @if (control.errors?.['min']) {
+            {{ 'validation.min' | translate }}
+        }
+    }
+</p>

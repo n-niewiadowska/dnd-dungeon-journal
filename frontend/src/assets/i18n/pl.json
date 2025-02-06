@@ -1,0 +1,230 @@
+{
+    "header": {
+        "title": "Dziennik Lochów",
+        "campaign": "Zarządzaj kampaniami",
+        "character": "Zarządzaj postaciami",
+        "skill": "Przeglądaj umiejętności",
+        "theme": "Zmień motyw"
+    },
+    "footer": {
+        "info": "<i>Dungeons and Dragons</i> jest grą z interaktywnym opowiadaniem historii, w której gracze spotykają się razem i uczestniczą w wymyślonej przygodzie.",
+        "source-head": "Ważne źródła:",
+        "source": "Oficjalna strona DnD"
+    },
+    "home": {
+        "header": "Planuj swoje przygody jak nigdy wcześniej!",
+        "content-1": "Twórz. Zarządzaj. Graj.",
+        "content-2": "Dziennik Lochów ożywia Twoje kampanie RPG poprzez organizowanie Twoich pomysłów, postaci i rozkładów bez zbędnego wysiłku.",
+        "content-3": "Wszystko, czego potrzebujesz do swoich podróży, znajduje się w jednym miejscu!"
+    },
+    "not-found": {
+        "status": "Nie znaleziono strony",
+        "back": "Wróć na stronę główną"
+    },
+    "validation": {
+        "required": "To pole jest obowiązkowe.",
+        "minlength": "Wartość jest zbyt krótka.",
+        "maxlength": "Wartość jest zbyt długa.",
+        "min": "Wartość jest zbyt niska."
+    },
+    "modal": {
+        "cancel": "Anuluj",
+        "delete": "Usuń",
+        "save": "Zapisz",
+        "campaign": {
+            "delete-header": "Usuń kampanię",
+            "edit-header": "Edytuj kampanię",
+            "delete-text": "Czy na pewno chcesz usunąć tę kampanię?",
+            "edit-text": "Czy na pewno chcesz edytować tę kampanię?"
+        },
+        "character": {
+            "delete-header": "Usuń postać",
+            "edit-header": "Edytuj postać",
+            "delete-text": "Czy na pewno chcesz usunąć tę postać?",
+            "edit-text": "Czy na pewno chcesz edytować tę postać?"
+        }
+    },
+    "common": {
+        "details": "Podgląd",
+        "new": "Stwórz",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "back": "Wróć",
+        "clear": "Wyczyść filtry",
+        "filter": "Filtruj po",
+        "sort": "Sortuj po",
+        "search": "Szukaj",
+        "page": {
+            "prev": "Poprzednia",
+            "next": "Następna",
+            "info": "Strona {{ curr }} z {{ total }}",
+            "number": "Liczba elementów na stronie"
+        }
+    },
+    "form": {
+        "edit": "Edytuj",
+        "create": "Stwórz",
+        "campaign": {
+            "edit": "Edytuj kampanię",
+            "create": "Stwórz kampanię",
+            "title": "Tytuł",
+            "description": "Opis",
+            "date": "Data rozpoczęcia"
+        },
+        "character": {
+            "edit": "Edytuj postać",
+            "create": "Stwórz postać",
+            "firstname": "Imię",
+            "lastname": "Nazwisko",
+            "age": "Wiek",
+            "race": "Rasa",
+            "class": "Klasa",
+            "magical": "Czy ma magiczne zdolności?",
+            "magical-yes": "Tak",
+            "magical-no": "Nie"
+        },
+        "skill": {
+            "header": "Umiejętność",
+            "name": "Nazwa",
+            "description": "Opis",
+            "ability": "Powiązana zdolność",
+            "level": "Poziom",
+            "effect": "Efekt"
+        }
+    },
+    "details": {
+        "campaign": {
+            "header": "Kampanie",
+            "start": "zaczyna się"
+        },
+        "character": {
+            "header": "Postacie",
+            "race": "Rasa",
+            "class": "Klasa",
+            "age": "Ma {{ age }} lat.",
+            "magical": "Posiada magiczne zdolności.",
+            "not-magical": "Nie posiada magicznych zdolności.",
+            "skill": "Główna umiejętność"
+        },
+        "skill": {
+            "header": "Umiejętności",
+            "ability": "Rozszerza zdolność: {{ ability }}.",
+            "level": "Poziom",
+            "effect": "Efekt"
+        }
+    },
+    "filters": {
+        "campaign": {
+            "search": "Szukaj po tytule",
+            "status": "Statusie",
+            "date": {
+                "label": "Dacie rozpoczęcia",
+                "option-1": "W przeszłości",
+                "option-2": "Teraz lub w przyszłości",
+                "option-3": "Wszystkie"
+            }
+        },
+        "character": {
+            "race": "Rasie",
+            "race-all": "Wszystkie rasy",
+            "class": "Klasie",
+            "ability": {
+                "label": "Magicznych zdolnościach",
+                "option-1": "Tak",
+                "option-2": "Nie",
+                "option-3": "Wszystkie"
+            }
+        },
+        "skill": {
+            "search": "Szukaj po nazwie",
+            "ability": "Zdolności",
+            "ability-all": "Wszystkie zdolności",
+            "level": {
+                "label": "Poziomie",
+                "option-1": "Pomiędzy 1 a 5",
+                "option-2": "Pomiędzy 5 a 15",
+                "option-3": "Powyżej 15-go",
+                "option-4": "Wszystkie"
+            }
+
+        }
+    },
+    "sort": {
+        "campaign": {
+            "title-asc": "Tytuł (A-Z)",
+            "title-desc": "Tytuł (Z-A)",
+            "date-asc": "Data (od najstarszych)",
+            "date-desc": "Data (od najnowszych)"
+        },
+        "character": {
+            "firstname-asc": "Imię (A-Z)",
+            "firstname-desc": "Imię (Z-A)",
+            "age-asc": "Wiek (od najmłodszych)",
+            "age-desc": "Wiek (od najstarszych)"
+        },
+        "skill": {
+            "name-asc": "Nazwa (A-Z)",
+            "name-desc": "Nazwa (Z-A)",
+            "level-asc": "Poziom (od najniższego)",
+            "level-desc": "Poziom (od najwyższego)"
+        }
+    },
+    "toast": {
+        "summary": {
+            "delete-success": "Usunięto",
+            "edit-success": "Edytowano",
+            "create-success": "Stworzono",
+            "error": "Błąd"
+        },
+        "campaign": {
+            "delete-success": "Kampania '{{ title }}' została usunięta pomyślnie.",
+            "edit-success": "Kampania została zaktualizowana pomyślnie.",
+            "create-success": "Kampania została stworzona pomyślnie.",
+            "delete-error": "Wystąpił błąd przy usuwaniu tej kampanii.",
+            "edit-error": "Wystąpił błąd przy edytowaniu tej kampanii.",
+            "create-error": "Wystąpił błąd przy tworzeniu tej kampanii."
+        },
+        "character": {
+            "delete-success": "{{ firstName }} {{ lastName }} został(a) usunięty(a) pomyślnie.",
+            "edit-success": "Postać została zaktualizowana pomyślnie.",
+            "create-success": "Postać została stworzona pomyślnie.",
+            "delete-error": "Wystąpił błąd przy usuwaniu tej postaci.",
+            "edit-error": "Wystąpił błąd przy edytowaniu tej postaci.",
+            "create-error": "Wystąpił błąd przy tworzeniu tej postaci."
+        }
+    },
+    "game-status": {
+        "PLANNED": "Planowana",
+        "IN_PROGRESS": "W trakcie",
+        "FINISHED": "Zakończona"
+    },
+    "dnd-class": {
+        "BARBARIAN": "Barbarzyńca",
+        "BARD": "Bard",
+        "DRUID": "Druid",
+        "FIGHTER": "Wojownik",
+        "MONK": "Mnich",
+        "PALADIN": "Paladyn",
+        "ROGUE": "Łotrzyk",
+        "SORCERER": "Czarownik",
+        "WARLOCK": "Czarnoksiężnik",
+        "WIZARD": "Czarodziej"
+    },
+    "race": {
+        "DRAGONBORN": "Smocze Dziecię",
+        "DWARF": "Krasnolud",
+        "ELF": "Elf",
+        "GNOME": "Gnom",
+        "HALFLING": "Niziołek",
+        "HUMAN": "Człowiek",
+        "ORC": "Ork",
+        "TIEFLING": "Diabelstwo"
+    },
+    "ability": {
+        "CHARISMA": "Charyzma",
+        "DEXTERITY": "Zręczność",
+        "INTELLIGENCE": "Inteligencja",
+        "STRENGTH": "Siła",
+        "WISDOM": "Mądrość"
+    }
+}

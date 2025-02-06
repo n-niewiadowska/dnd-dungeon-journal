@@ -1,0 +1,93 @@
+<div class="content">
+  <h2>
+    {{
+      isEdit
+        ? ("form.campaign.edit" | translate)
+        : ("form.campaign.create" | translate)
+    }}
+  </h2>
+
+  <form [formGroup]="campaignForm" (ngSubmit)="showDialog()">
+    <div>
+      <label for="title">{{ "form.campaign.title" | translate }}: </label>
+      <div class="input">
+        <input type="text" pInputText formControlName="title" />
+        <app-validation-message [control]="campaignForm.controls.title" />
+      </div>
+    </div>
+
+    <div>
+      <label for="description"
+        >{{ "form.campaign.description" | translate }}:
+      </label>
+      <textarea
+        pTextarea
+        rows="5"
+        cols="30"
+        formControlName="description"
+      ></textarea>
+    </div>
+
+    <div>
+      <label for="beginningDate"
+        >{{ "form.campaign.date" | translate }}:
+      </label>
+      <div class="input">
+        <p-date-picker formControlName="beginningDate" />
+        <app-validation-message
+          [control]="campaignForm.controls.beginningDate"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for="status">Status:</label>
+      <select id="status" formControlName="status">
+        @for(status of gameStatuses; track $index) {
+        <option [value]="status">
+          {{ "game-status." + status | translate }}
+        </option>
+        }
+      </select>
+    </div>
+
+    <div class="buttons">
+      <p-button
+        type="submit"
+        [disabled]="campaignForm.invalid"
+        label="{{
+          isEdit ? ('form.edit' | translate) : ('form.create' | translate)
+        }}"
+        styleClass="p-button-edit"
+      />
+      <p-button
+        styleClass="p-button-back"
+        label="{{ 'common.back' | translate }}"
+        (click)="goBack()"
+      />
+    </div>
+  </form>
+
+  <p-dialog
+    header="{{ 'modal.campaign.edit-header' | translate }}"
+    [modal]="true"
+    [visible]="visible"
+    [style]="{ width: '25rem' }"
+  >
+    <span class="p-text-secondary block mb-8">{{
+      "modal.campaign.edit-text" | translate
+    }}</span>
+    <div class="flex justify-end gap-2">
+      <p-button
+        label="{{ 'modal.cancel' | translate }}"
+        styleClass="p-button-cancel"
+        (click)="visible = false"
+      />
+      <p-button
+        label="{{ 'modal.save' | translate }}"
+        styleClass="p-button-save"
+        (click)="saveCampaign()"
+      />
+    </div>
+  </p-dialog>
+</div>
