@@ -12,13 +12,13 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:4200"); // Zezwól na frontend
-        config.addAllowedHeader("*"); // Zezwól na wszystkie nagłówki
-        config.addAllowedMethod("*"); // Zezwól na wszystkie metody (GET, POST, itd.)
-        config.setAllowCredentials(true); // Zezwól na uwierzytelnianie ciasteczkami
+        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config); // Dotyczy wszystkich endpointów
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }
